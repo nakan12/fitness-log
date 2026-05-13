@@ -245,15 +245,16 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 
 
 /* MINDSET CARD (today's principle) */
-.mind-link{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:24px;cursor:pointer;width:100%;text-align:left;font-family:inherit;color:var(--text);transition:border-color 0.18s,box-shadow 0.18s;-webkit-tap-highlight-color:transparent}
-.mind-link:hover{border-color:var(--border2);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
-.mind-link-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex-shrink:0;width:42px;padding:6px 0;background:var(--ink);border-radius:8px;color:var(--accent)}
-.mind-link-side em{font-style:normal;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.14em;color:rgba(255,255,255,0.55)}
-.mind-link-side strong{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--accent);letter-spacing:-0.02em;line-height:1}
-.mind-link-content{flex:1;min-width:0}
-.mind-link-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;color:var(--text3);margin-bottom:4px}
-.mind-link-title{font-size:13px;font-weight:700;color:var(--text);line-height:1.35;letter-spacing:-0.01em}
-.mind-link-arrow{font-size:18px;color:var(--text3);line-height:1;flex-shrink:0}
+.mind-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px 16px;margin-bottom:24px;width:100%;font-family:inherit;color:var(--text);text-align:left;display:block;-webkit-tap-highlight-color:transparent}
+.mind-card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.mind-card-tag{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--accent);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;padding:5px 10px;border-radius:100px;font-weight:700;flex-shrink:0}
+.mind-card-tag em{font-style:normal;color:rgba(255,255,255,0.55);font-weight:500}
+.mind-card-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--text3);font-weight:700}
+.mind-card-title{font-size:17px;font-weight:700;color:var(--text);line-height:1.4;letter-spacing:-0.015em;margin-bottom:8px}
+.mind-card-body{font-size:13px;line-height:1.8;color:var(--text2);margin-bottom:14px}
+.mind-card-more{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;color:var(--text);font-family:inherit;width:100%;font-size:12px;font-weight:700;letter-spacing:-0.01em;transition:background 0.15s;-webkit-tap-highlight-color:transparent}
+.mind-card-more:hover{background:var(--card2)}
+.mind-card-more-arrow{font-size:16px;color:var(--text3);line-height:1}
 
 /* MINDSET DIALOG */
 .mind-dialog{border:none;border-radius:18px;padding:0;background:var(--card);color:var(--text);max-width:560px;width:calc(100% - 32px);max-height:84vh;overflow:hidden;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
@@ -263,20 +264,30 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .mind-head-l{display:flex;flex-direction:column;gap:2px}
 .mind-head-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;color:var(--text3)}
 .mind-head-title{font-size:16px;font-weight:700;letter-spacing:-0.01em}
-.mind-body{padding:6px 18px 22px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
-.mind-item{display:flex;gap:14px;padding:16px 4px;border-bottom:1px solid var(--border)}
+.mind-body{padding:10px 18px 24px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.mind-item{padding:18px 4px;border-bottom:1px solid var(--border)}
 .mind-item:last-child{border-bottom:none}
-.mind-item-num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.04em;color:var(--text2);background:var(--soft);border:1px solid var(--border);border-radius:6px;padding:4px 8px;height:fit-content;font-weight:700;flex-shrink:0;min-width:34px;text-align:center}
+.mind-item.today{background:linear-gradient(180deg, rgba(170,255,0,0.06), transparent);margin:0 -10px;padding:18px 14px;border-radius:12px;border-bottom:1px solid transparent;position:relative}
+.mind-item.today + .mind-item{border-top:1px solid var(--border)}
+.mind-item-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.mind-item-num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.04em;color:var(--text2);background:var(--soft);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-weight:700;flex-shrink:0;min-width:34px;text-align:center}
 .mind-item.today .mind-item-num{background:var(--ink);color:var(--accent);border-color:var(--ink)}
-.mind-item-body{flex:1;min-width:0}
-.mind-item-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:6px;letter-spacing:-0.01em}
-.mind-item.today .mind-item-title::after{content:'今日';display:inline-block;font-size:9px;font-family:'DM Mono',monospace;letter-spacing:0.08em;background:var(--ink);color:var(--accent);padding:2px 6px;border-radius:4px;margin-left:8px;vertical-align:middle;font-weight:700}
-.mind-item-text{font-size:12px;line-height:1.75;color:var(--text2)}
+.mind-item-today-pill{display:none;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:0.08em;background:var(--ink);color:var(--accent);padding:3px 8px;border-radius:5px;font-weight:700}
+.mind-item.today .mind-item-today-pill{display:inline-block}
+.mind-item-title{font-size:16px;font-weight:700;line-height:1.45;margin-bottom:8px;letter-spacing:-0.015em;color:var(--text)}
+.mind-item-text{font-size:13px;line-height:1.8;color:var(--text2)}
 
 @media(max-width:860px){
-  .mind-dialog{max-width:100%;width:100%;border-radius:18px 18px 0 0;margin:auto 0 0;position:fixed;bottom:0;left:0;right:0;top:auto;transform:none;max-height:88vh}
-  .mind-link{padding:12px 14px}
-  .mind-link-title{font-size:12.5px}
+  .mind-dialog{max-width:100%;width:100%;border-radius:18px 18px 0 0;margin:auto 0 0;position:fixed;bottom:0;left:0;right:0;top:auto;transform:none;max-height:90vh}
+  .mind-head{padding:16px 18px 12px}
+  .mind-head-title{font-size:15px}
+  .mind-body{padding:8px 16px 24px}
+  .mind-card{padding:16px 16px 14px;border-radius:14px}
+  .mind-card-title{font-size:15.5px}
+  .mind-card-body{font-size:12.5px;line-height:1.75}
+  .mind-item.today{margin:0 -8px;padding:16px 12px}
+  .mind-item-title{font-size:15px}
+  .mind-item-text{font-size:12.5px;line-height:1.75}
 }
 
 /* MICRO-ANIMATIONS */
@@ -490,15 +501,19 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   </div>
 
 
-  <!-- ===== MINDSET LINK ===== -->
-  <button class="mind-link" onclick="openMind()" aria-label="今日のマインド">
-    <div class="mind-link-side"><em>NO.</em><strong id="mindLinkNum">--</strong></div>
-    <div class="mind-link-content">
-      <div class="mind-link-label">TODAY'S MINDSET</div>
-      <div class="mind-link-title" id="mindLinkTitle">--</div>
+  <!-- ===== MINDSET CARD ===== -->
+  <div class="mind-card">
+    <div class="mind-card-head">
+      <span class="mind-card-tag"><em>NO.</em><span id="mindLinkNum">--</span><em>/ 7</em></span>
+      <span class="mind-card-label">TODAY'S MINDSET</span>
     </div>
-    <div class="mind-link-arrow">›</div>
-  </button>
+    <div class="mind-card-title" id="mindLinkTitle">--</div>
+    <div class="mind-card-body" id="mindLinkBody">--</div>
+    <button class="mind-card-more" onclick="openMind()">
+      <span>7 原則を全部見る</span>
+      <span class="mind-card-more-arrow">›</span>
+    </button>
+  </div>
 
   <!-- ===== 28-DAY HEATMAP ===== -->
   <div class="heatmap-wrap">
@@ -1888,8 +1903,10 @@ function renderMindLink(){
   const i = pickTodayPrinciple();
   const num = document.getElementById('mindLinkNum');
   const ttl = document.getElementById('mindLinkTitle');
+  const bdy = document.getElementById('mindLinkBody');
   if(num) num.textContent = String(i + 1);
   if(ttl) ttl.textContent = MINDSET[i].title;
+  if(bdy) bdy.textContent = MINDSET[i].body;
 }
 function openMind(){
   const list = document.getElementById('mindList');
@@ -1898,19 +1915,21 @@ function openMind(){
   list.innerHTML = MINDSET.map((m, i) => {
     const cls = i === todayI ? ' today' : '';
     return '<div class="mind-item' + cls + '">'
-      + '<div class="mind-item-num">#' + (i+1) + '</div>'
-      + '<div class="mind-item-body">'
+      + '<div class="mind-item-head">'
+      + '<span class="mind-item-num">#' + (i+1) + '</span>'
+      + '<span class="mind-item-today-pill">今日</span>'
+      + '</div>'
       + '<div class="mind-item-title">' + m.title + '</div>'
       + '<div class="mind-item-text">' + m.body + '</div>'
-      + '</div></div>';
+      + '</div>';
   }).join('');
   const dlg = document.getElementById('mindModal');
   if(typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open','');
-  // scroll the today's item into view after open
+  // reset body scroll to top so #1 is visible first
   setTimeout(()=>{
-    const t = list.querySelector('.mind-item.today');
-    if(t) t.scrollIntoView({behavior:'auto', block:'start'});
-  }, 40);
+    const body = dlg.querySelector('.mind-body');
+    if(body) body.scrollTop = 0;
+  }, 30);
 }
 function closeMind(){
   const dlg = document.getElementById('mindModal');
