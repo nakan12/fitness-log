@@ -278,7 +278,12 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .mind-item-text{font-size:13px;line-height:1.8;color:var(--text2)}
 
 @media(max-width:860px){
-  .mind-dialog{max-width:100%;width:100%;border-radius:18px 18px 0 0;margin:auto 0 0;position:fixed;bottom:0;left:0;right:0;top:auto;transform:none;max-height:90vh}
+  .mind-dialog{
+    /* override <dialog> defaults (margin:auto; inset:0) to dock at bottom */
+    inset:auto 0 0 0;margin:0;width:100%;max-width:none;
+    height:85vh;height:85dvh;max-height:85vh;max-height:85dvh;
+    border-radius:18px 18px 0 0;transform:none
+  }
   .mind-head{padding:16px 18px 12px}
   .mind-head-title{font-size:15px}
   .mind-body{padding:8px 16px 24px}
@@ -318,7 +323,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   .checkin-list{gap:6px}
   .ci-btn{padding:11px 4px}
   .hm-cell{border-radius:2px}
-  .milestone-dialog{max-width:100%;width:100%;border-radius:18px 18px 0 0;margin:auto 0 0;position:fixed;bottom:0;left:0;right:0;top:auto;transform:none}
+  .milestone-dialog{inset:auto 0 0 0;margin:0;width:100%;max-width:none;border-radius:18px 18px 0 0;transform:none}
   .milestone-num{font-size:64px}
 }
 /* PROGRESS BAR (inside TODAY box) */
@@ -369,7 +374,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   .content-inner{padding:0 16px}
   .record-form{padding:16px}
   /* Settings dialog as bottom-sheet */
-  .settings-dialog{max-width:100%;width:100%;border-radius:16px 16px 0 0;margin:auto 0 0;position:fixed;bottom:0;left:0;right:0;top:auto;transform:none}
+  .settings-dialog{inset:auto 0 0 0;margin:0;width:100%;max-width:none;border-radius:16px 16px 0 0;transform:none}
   .topbar-day{display:none}
   .topbar-today{padding:6px 9px;font-size:10px}
 }
