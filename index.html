@@ -137,6 +137,13 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 
 .rest-block{margin-top:12px;background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:12px;color:var(--text2);line-height:1.65}
 
+
+/* DAY ACTIONS row (record + calendar) */
+.day-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.day-actions .cal-add-btn{margin-top:0}
+.day-rec-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--ink);border:1px solid var(--ink);border-radius:8px;font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:opacity 0.15s;-webkit-tap-highlight-color:transparent}
+.day-rec-btn:hover{opacity:0.85}
+.day-rec-btn:active{transform:scale(0.97)}
 /* CAL ADD BTN */
 .cal-add-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:8px 14px;background:var(--card);border:1px solid var(--border2);border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.15s}
 .cal-add-btn:hover{background:var(--ink);border-color:var(--ink);color:var(--accent)}
@@ -209,13 +216,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .ci-done-banner{margin-top:12px;padding:8px 14px;background:rgba(170,255,0,0.16);border:1px solid rgba(170,255,0,0.4);border-radius:10px;font-size:11px;color:var(--accent);text-align:center;font-family:'DM Mono',monospace;letter-spacing:0.06em;font-weight:700;display:none}
 .ci-done-banner.show{display:block;animation:slideIn 0.4s ease}
 
-/* HUB CTA — meal log shortcut */
-.hub-cta{margin-top:12px;display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.15s;-webkit-tap-highlight-color:transparent}
-.hub-cta:hover{background:rgba(255,255,255,0.1)}
-.hub-cta-text{flex:1;text-align:left}
-.hub-cta-meta{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;color:rgba(255,255,255,0.5);padding:3px 8px;border-radius:100px;background:rgba(255,255,255,0.08)}
-.hub-cta-meta.done{color:var(--ink);background:var(--accent)}
-.hub-cta-arrow{font-size:18px;color:rgba(255,255,255,0.5);line-height:1}
 
 /* HEATMAP (28 squares) */
 .heatmap-wrap{margin-bottom:24px}
@@ -510,11 +510,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         </button>
       </div>
       <div class="ci-done-banner" id="ciDoneBanner">DAY DONE — お疲れさまでした</div>
-      <button class="hub-cta" onclick="sw('r')" aria-label="食事と運動の記録へ">
-        <span class="hub-cta-text">食事・運動を記録する</span>
-        <span class="hub-cta-meta" id="hubCtaMeta">未記録</span>
-        <span class="hub-cta-arrow">›</span>
-      </button>
     </div>
   </div>
 
@@ -593,7 +588,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">スクワット 15回×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(1)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(1)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(1)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -615,7 +610,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>夜：作り置き鶏むね + きのこスープ + ほうれん草</strong><br>炭水化物なし・冷蔵庫から出すだけ<span class="kcal">約380kcal</span></div></div>
           </div>
           <div class="rest-block"><strong>外出日の鉄則：</strong>昼は自由。午後に間食。夜は炭水化物なし。</div>
-          <button class="cal-add-btn" onclick="addToCalendar(2)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(2)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(2)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -632,7 +627,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き：鶏むね + ほうれん草おひたし + 味噌汁</strong><span class="kcal">約380kcal</span></div></div>
           </div>
           <div class="rest-block">歩数目標 8,000歩。昼休みに10分歩くだけでも可。</div>
-          <button class="cal-add-btn" onclick="addToCalendar(3)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(3)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(3)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -658,7 +653,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">プランク 40秒×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(4)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(4)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(4)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -679,7 +674,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ or チーズ</strong><span class="kcal">約100kcal</span></div></div>
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>夜：軽め</strong><br>お酒ならハイボール・焼酎。炭水化物は控えめに<span class="kcal">約400kcal</span></div></div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(5)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(5)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(5)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -706,7 +701,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">腹筋 20回×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(6)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(6)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(6)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -722,7 +717,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">仕込み</div><div class="mc"><strong>翌週分の作り置きを仕込む</strong><br>鶏むね塩茹で・ゆで卵・きのこスープ。週の食事が楽になる。</div></div>
           </div>
           <div class="rest-block">運動なし。よく眠る。翌週の準備日として使う。</div>
-          <button class="cal-add-btn" onclick="addToCalendar(7)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(7)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(7)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -789,7 +784,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">腹筋 25回×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(8)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(8)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(8)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -810,7 +805,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ25g or チーズ</strong><span class="kcal">約120kcal</span></div></div>
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き：鶏むね + ブロッコリー + スープ</strong><br>炭水化物なし<span class="kcal">約360kcal</span></div></div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(9)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(9)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(9)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -841,7 +836,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">プランク 40秒×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(10)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(10)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(10)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -858,7 +853,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き：鶏むね + ブロッコリー + スープ</strong><span class="kcal">約360kcal</span></div></div>
           </div>
           <div class="rest-block">歩数目標 8,500歩。</div>
-          <button class="cal-add-btn" onclick="addToCalendar(11)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(11)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(11)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -879,7 +874,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ or チーズ</strong><span class="kcal">約120kcal</span></div></div>
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>夜：軽め。お酒はハイボール・焼酎</strong><span class="kcal">約400kcal</span></div></div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(12)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(12)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(12)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -904,7 +899,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">バーピー 8回×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(13)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(13)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(13)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -920,7 +915,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">仕込み</div><div class="mc"><strong>翌週分を作り置き</strong><br>鶏むね塩茹で・ゆで卵・ブロッコリー・スープ</div></div>
           </div>
           <div class="rest-block">運動なし。体重は週1回・朝起きてすぐ計測。数字に一喜一憂しない。</div>
-          <button class="cal-add-btn" onclick="addToCalendar(14)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(14)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(14)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -985,7 +980,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">バーピー 8回×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(15)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(15)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(15)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1007,7 +1002,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き鮭 or 鶏むね + 野菜 + スープ</strong><br>炭水化物なし<span class="kcal">約400kcal</span></div></div>
           </div>
           <div class="rest-block">通勤の往復を早歩きで。目標9,000歩。</div>
-          <button class="cal-add-btn" onclick="addToCalendar(16)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(16)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(16)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1037,7 +1032,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">プランク 60秒×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(17)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(17)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(17)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1054,7 +1049,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>鮭 or 鶏むね + 野菜 + スープ</strong>（炭水化物控えめ）<span class="kcal">約400kcal</span></div></div>
           </div>
           <div class="rest-block">30分ウォーキング（早歩き）。朝でも夜でも可。目標9,000歩。</div>
-          <button class="cal-add-btn" onclick="addToCalendar(18)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(18)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(18)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1075,7 +1070,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ + チーズ</strong><span class="kcal">約150kcal</span></div></div>
             <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>夜：軽め。炭水化物なし</strong><span class="kcal">約380kcal</span></div></div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(19)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(19)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(19)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1101,7 +1096,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">バーピー 10回×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(20)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(20)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(20)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1117,7 +1112,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">仕込み</div><div class="mc"><strong>翌週分を作り置き</strong><br>鶏むね・鮭・ゆで卵・ブロッコリー・スープ</div></div>
           </div>
           <div class="rest-block">体重より先にウエストが変わる。3週間続いたら習慣化の臨界点を超えた証拠。</div>
-          <button class="cal-add-btn" onclick="addToCalendar(21)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(21)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(21)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1182,7 +1177,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">バーピー 10回×3</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(22)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(22)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(22)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1203,7 +1198,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
             <div class="meal-row"><div class="ml">間食</div><div class="mc">外出日の午後の間食が<strong>当たり前</strong>になっている</div></div>
             <div class="meal-row"><div class="ml">夕食</div><div class="mc">夜の<strong>炭水化物なし・軽め</strong>が自然にできるようになっている</div></div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(23)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(23)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(23)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1230,7 +1225,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
               <span class="ex-item">体重・ウエスト計測</span>
             </div>
           </div>
-          <button class="cal-add-btn" onclick="addToCalendar(28)">カレンダーに追加</button>
+          <div class="day-actions"><button class="day-rec-btn" onclick="gotoRecord(28)">この日を記録する</button><button class="cal-add-btn" onclick="addToCalendar(28)">カレンダーに追加</button></div>
         </div>
       </div>
 
@@ -1571,6 +1566,12 @@ const DAY_PLAN = {
   28:{title:'ゴール 月末計測',desc:'体重・ウエスト計測(朝起きてすぐ)。1ヶ月の振り返り。できたことを数える。2ヶ月目の目標設定。お疲れさまでした。'},
 };
 
+function gotoRecord(dayN){
+  const d = dayToDate(dayN);
+  sw('r');
+  setTimeout(()=>{ selectDay(ymd(d)); window.scrollTo({top:0, behavior:'smooth'}); }, 120);
+}
+
 function addToCalendar(dayN){
   const plan = DAY_PLAN[dayN] || {title:'DAY '+dayN, desc:'fitness-log DAY '+dayN};
   const d = dayToDate(dayN);
@@ -1778,14 +1779,6 @@ function renderHub(){
   if(banner) banner.classList.toggle('show', doneCount === 3);
   const streakEl = document.getElementById('hubStreak');
   if(streakEl) streakEl.textContent = String(calcStreak());
-  // meal CTA: indicate whether today has a meal record yet
-  const meal = loadMeal()[ymd(today)] || {};
-  const mealAny = !!(meal.morning || meal.lunch || meal.dinner || meal.snack || meal.exercise || meal.note);
-  const ctaMeta = document.getElementById('hubCtaMeta');
-  if(ctaMeta){
-    ctaMeta.textContent = mealAny ? '記録済み' : '未記録';
-    ctaMeta.classList.toggle('done', mealAny);
-  }
   // hide hub if out of range and no need
   const hub = document.getElementById('todayHub');
   if(hub) hub.style.display = (n < -2 || n > TOTAL_DAYS + 30) ? 'none' : '';
