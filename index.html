@@ -180,13 +180,14 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 /* TODAY HUB */
 .hub{background:var(--ink);color:#fff;border-radius:18px;padding:22px 24px;margin-bottom:24px;position:relative;overflow:hidden}
 .hub-grid{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
-.hub-ring{width:96px;height:96px;flex-shrink:0;position:relative}
-.hub-ring svg{transform:rotate(-90deg)}
-.hub-ring-bg{stroke:rgba(255,255,255,0.12);fill:none;stroke-width:7}
-.hub-ring-fg{stroke:var(--accent);fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 0.6s cubic-bezier(.5,.1,.3,1)}
-.hub-ring-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
-.hub-ring-num strong{font-family:'DM Mono',monospace;font-size:30px;font-weight:500;color:var(--accent);letter-spacing:-0.02em}
-.hub-ring-num small{font-size:9px;color:rgba(255,255,255,0.5);font-family:'DM Mono',monospace;letter-spacing:0.1em;margin-top:2px}
+.hub-ring{width:108px;height:108px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center}
+.hub-ring svg{position:absolute;inset:0;transform:rotate(-90deg);transform-origin:center}
+.hub-ring-bg{stroke:rgba(255,255,255,0.12);fill:none;stroke-width:6}
+.hub-ring-fg{stroke:var(--accent);fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 0.7s cubic-bezier(.5,.1,.3,1)}
+.hub-ring-num{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;text-align:center;gap:3px}
+.hub-ring-num em{font-family:'DM Mono',monospace;font-size:9px;font-style:normal;font-weight:700;color:rgba(255,255,255,0.55);letter-spacing:0.16em}
+.hub-ring-num strong{font-family:'DM Mono',monospace;font-size:36px;font-weight:500;color:var(--accent);letter-spacing:-0.04em;line-height:0.9}
+.hub-ring-num small{font-size:9px;color:rgba(255,255,255,0.45);font-family:'DM Mono',monospace;letter-spacing:0.1em;font-weight:500}
 .hub-info{min-width:0}
 .hub-greet{font-size:11px;letter-spacing:0.08em;color:rgba(255,255,255,0.55);margin-bottom:4px;font-family:'DM Mono',monospace}
 .hub-title{font-size:22px;font-weight:700;letter-spacing:-0.02em;color:#fff;line-height:1.2}
@@ -242,18 +243,12 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   100%{opacity:0;transform:translateY(-80px) scale(1)}
 }
 
-/* GOAL section in settings */
-.settings-goal-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.settings-mini-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:0.08em;margin-bottom:3px}
-.settings-mini-input{padding:9px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg);color:var(--text);outline:none;width:100%;-webkit-appearance:none;font-family:'Noto Sans JP',sans-serif}
-.settings-mini-input:focus{border-color:var(--ink)}
-
 /* MICRO-ANIMATIONS */
 @keyframes slideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes popIn{0%{transform:scale(0.6);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
 .panel.active{animation:slideIn 0.32s ease}
 .toast.show{animation:popIn 0.32s ease}
-.body-save-btn:active,.record-save-btn:active,.settings-btn-primary:active{transform:scale(0.97)}
+.record-save-btn:active,.settings-btn-primary:active{transform:scale(0.97)}
 .day-card{will-change:transform}
 
 /* SAVE PULSE */
@@ -263,15 +258,15 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   100%{box-shadow:0 0 0 12px rgba(170,255,0,0)}
 }
 
-/* GOAL LINE label in chart */
-.body-goal-label{font-size:9px;font-family:'DM Mono',monospace;fill:var(--text3)}
 
 /* HUB MOBILE TUNES */
 @media(max-width:860px){
   .hub{padding:18px 20px;border-radius:16px}
   .hub-grid{gap:16px}
-  .hub-ring{width:82px;height:82px}
-  .hub-ring-num strong{font-size:26px}
+  .hub-ring{width:94px;height:94px}
+  .hub-ring svg{width:94px;height:94px}
+  .hub-ring-num strong{font-size:30px}
+  .hub-ring-num em{font-size:8px}
   .hub-title{font-size:19px}
   .checkin-list{gap:6px}
   .ci-btn{padding:11px 4px}
@@ -311,20 +306,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .settings-btn-danger{padding:10px;background:transparent;color:#cc0000;border:1px solid #cc000033;border-radius:8px;font-size:12px;font-weight:600;font-family:'Noto Sans JP',sans-serif;cursor:pointer;grid-column:1/-1}
 .settings-note{font-size:11px;color:var(--text3);line-height:1.6;margin-top:8px}
 
-/* BODY TRACKER */
-.body-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px}
-.body-section-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.body-section-title span{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);font-weight:400}
-.body-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:14px}
-.body-input{padding:9px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);outline:none;width:100%;-webkit-appearance:none}
-.body-input:focus{border-color:var(--ink)}
-.body-input-wrap{display:flex;flex-direction:column;gap:3px}
-.body-input-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:0.08em}
-.body-save-btn{padding:9px 14px;background:var(--text);color:var(--accent);border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;height:34px;font-family:'Noto Sans JP',sans-serif}
-.body-chart{width:100%;height:160px;display:block;margin-top:6px}
-.body-chart-empty{font-size:12px;color:var(--text3);text-align:center;padding:30px 0}
-.body-legend{display:flex;gap:14px;font-size:11px;color:var(--text2);margin-top:6px;justify-content:center}
-.body-legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
 
 /* RESPONSIVE */
 @media(max-width:860px){
@@ -340,10 +321,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   .week-header{padding:16px 18px}.wh-title{font-size:18px}
   .content-inner{padding:0 16px}
   .record-form{padding:16px}
-  .body-section{padding:16px}
-  .body-form{grid-template-columns:1fr 1fr;gap:8px}
-  .body-form .body-input-wrap:first-child{grid-column:1/-1}
-  .body-save-btn{grid-column:1/-1;height:38px}
   /* Settings dialog as bottom-sheet */
   .settings-dialog{max-width:100%;width:100%;border-radius:16px 16px 0 0;margin:auto 0 0;position:fixed;bottom:0;left:0;right:0;top:auto;transform:none}
   .topbar-day{display:none}
@@ -437,11 +414,15 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   <div class="hub" id="todayHub">
     <div class="hub-grid">
       <div class="hub-ring">
-        <svg width="96" height="96" viewBox="0 0 96 96">
-          <circle class="hub-ring-bg" cx="48" cy="48" r="42"></circle>
-          <circle class="hub-ring-fg" id="hubRingFg" cx="48" cy="48" r="42" stroke-dasharray="263.9" stroke-dashoffset="263.9"></circle>
+        <svg viewBox="0 0 108 108" width="108" height="108" aria-hidden="true">
+          <circle class="hub-ring-bg" cx="54" cy="54" r="48"></circle>
+          <circle class="hub-ring-fg" id="hubRingFg" cx="54" cy="54" r="48" stroke-dasharray="301.6" stroke-dashoffset="301.6"></circle>
         </svg>
-        <div class="hub-ring-num"><strong id="hubDayNum">--</strong><small id="hubTotal">/ 28</small></div>
+        <div class="hub-ring-num">
+          <em>DAY</em>
+          <strong id="hubDayNum">--</strong>
+          <small id="hubTotal">/ 28</small>
+        </div>
       </div>
       <div class="hub-info">
         <div class="hub-greet" id="hubGreet">TODAY</div>
@@ -1187,32 +1168,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   <div class="panel" id="panel-record" data-panel="r">
     <div class="record-header">
       <div class="record-title">記録</div>
-      <div class="record-sub">毎日の食事・運動・体重をここで記録する</div>
-    </div>
-
-    <!-- 体重・ウエスト -->
-    <div class="body-section">
-      <div class="body-section-title">体重・ウエスト <span>BODY LOG</span></div>
-      <div class="body-form">
-        <div class="body-input-wrap">
-          <div class="body-input-label">DATE</div>
-          <input type="date" class="body-input" id="bodyDate">
-        </div>
-        <div class="body-input-wrap">
-          <div class="body-input-label">体重 (kg)</div>
-          <input type="number" inputmode="decimal" step="0.1" class="body-input" id="bodyWeight" placeholder="例 68.5">
-        </div>
-        <div class="body-input-wrap">
-          <div class="body-input-label">ウエスト (cm)</div>
-          <input type="number" inputmode="decimal" step="0.1" class="body-input" id="bodyWaist" placeholder="例 82.0">
-        </div>
-        <button class="body-save-btn" onclick="saveBody()">保存</button>
-      </div>
-      <svg class="body-chart" id="bodyChart" viewBox="0 0 600 160" preserveAspectRatio="none"></svg>
-      <div class="body-legend">
-        <span><span class="body-legend-dot" style="background:var(--ink)"></span>体重</span>
-        <span><span class="body-legend-dot" style="background:var(--text3)"></span>ウエスト</span>
-      </div>
+      <div class="record-sub">毎日の食事・運動・気づきをここで記録する</div>
     </div>
 
     <div class="record-day-select" id="daySelectRow"></div>
@@ -1283,22 +1239,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
       <div class="settings-note">開始日を変更しても食事記録・体重記録は日付タグで保持されます。</div>
     </div>
     <div class="settings-row">
-      <div class="settings-label">目標値（任意・グラフに目標線を描画）</div>
-      <div class="settings-goal-row">
-        <div>
-          <div class="settings-mini-label">目標体重 (kg)</div>
-          <input type="number" inputmode="decimal" step="0.1" class="settings-mini-input" id="goalWeight" placeholder="例 65.0">
-        </div>
-        <div>
-          <div class="settings-mini-label">目標ウエスト (cm)</div>
-          <input type="number" inputmode="decimal" step="0.1" class="settings-mini-input" id="goalWaist" placeholder="例 78.0">
-        </div>
-      </div>
-      <div class="settings-actions" style="grid-template-columns:1fr;margin-top:8px">
-        <button class="settings-btn-secondary" onclick="saveGoals()">目標を保存</button>
-      </div>
-    </div>
-    <div class="settings-row">
       <div class="settings-label">データ管理</div>
       <div class="settings-actions">
         <button class="settings-btn-danger" onclick="clearAllData()">全データを削除する</button>
@@ -1332,7 +1272,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 
 const K_SETTINGS = 'fl_settings_v1';
 const K_MEAL     = 'fl_meal_log_v1';
-const K_BODY     = 'fl_body_log_v1';
 const K_LEGACY   = 'diet_records_v2';
 const TOTAL_DAYS = 28;
 const WD = ['日','月','火','水','木','金','土'];
@@ -1379,8 +1318,6 @@ function dayToWeek(n){return Math.ceil(n / 7);}
 /* ---------- meal / body storage ---------- */
 function loadMeal(){try{return JSON.parse(localStorage.getItem(K_MEAL))||{};}catch(e){return {};}}
 function saveMealAll(r){try{localStorage.setItem(K_MEAL,JSON.stringify(r));}catch(e){}}
-function loadBody(){try{return JSON.parse(localStorage.getItem(K_BODY))||{};}catch(e){return {};}}
-function saveBodyAll(r){try{localStorage.setItem(K_BODY,JSON.stringify(r));}catch(e){}}
 
 /* Migrate legacy diet_records_v2 → fl_meal_log_v1 (one-time) */
 function migrateLegacy(){
@@ -1402,7 +1339,7 @@ function sw(n){
   if(panel) panel.classList.add('active');
   document.querySelectorAll('[data-w="'+n+'"]').forEach(b=>b.classList.add('active'));
   window.scrollTo({top:0,behavior:'smooth'});
-  if(n==='r'){renderLog();renderBodyChart();}
+  if(n==='r') renderLog();
 }
 function td(btn){btn.closest('.day-card').classList.toggle('open');}
 
@@ -1641,89 +1578,12 @@ function renderLog(){
 }
 
 /* ---------- body (weight / waist) record ---------- */
-function saveBody(){
-  const ds = document.getElementById('bodyDate').value;
-  const w = parseFloat(document.getElementById('bodyWeight').value);
-  const ws = parseFloat(document.getElementById('bodyWaist').value);
-  if(!ds){ toast('日付を入力してください'); return; }
-  if(isNaN(w) && isNaN(ws)){ toast('体重かウエストを入力してください'); return; }
-  const all = loadBody();
-  const cur = all[ds] || {};
-  if(!isNaN(w))  cur.weight = w;
-  if(!isNaN(ws)) cur.waist  = ws;
-  all[ds] = cur;
-  saveBodyAll(all);
-  toast('体重・ウエストを保存しました');
-  renderBodyChart();
-  renderHub();
-  renderHeatmap();
-}
-function renderBodyChart(){
-  const svg = document.getElementById('bodyChart'); if(!svg) return;
-  const data = loadBody();
-  const keys = Object.keys(data).sort();
-  if(!keys.length){
-    svg.innerHTML = '<text x="300" y="80" text-anchor="middle" fill="#888" font-size="13" font-family="Noto Sans JP, sans-serif">体重・ウエストの記録がここに表示されます</text>';
-    return;
-  }
-  const W = 600, H = 160, padL = 36, padR = 12, padT = 14, padB = 22;
-  const xs = keys.map(k=>parseYmd(k).getTime());
-  const xMin = Math.min(...xs), xMax = Math.max(...xs);
-  const xRange = Math.max(1, xMax - xMin);
-  const weights = keys.map(k=>data[k].weight).filter(v=>typeof v==='number');
-  const waists  = keys.map(k=>data[k].waist).filter(v=>typeof v==='number');
-  const allVals = [...weights, ...waists];
-  if(!allVals.length){
-    svg.innerHTML = '<text x="300" y="80" text-anchor="middle" fill="#888" font-size="13">数値の記録がありません</text>';
-    return;
-  }
-  const vMin = Math.min(...allVals), vMax = Math.max(...allVals);
-  const vPad = Math.max(0.5, (vMax - vMin) * 0.15);
-  const yMin = vMin - vPad, yMax = vMax + vPad;
-  const yRange = Math.max(0.1, yMax - yMin);
-  function px(t){return padL + (t - xMin) / xRange * (W - padL - padR);}
-  function py(v){return padT + (1 - (v - yMin) / yRange) * (H - padT - padB);}
-  function pathFor(field, color){
-    const pts = keys.filter(k=>typeof data[k][field]==='number')
-                    .map(k=>[px(parseYmd(k).getTime()), py(data[k][field])]);
-    if(!pts.length) return '';
-    const line = pts.map((p,i)=>(i===0?'M':'L')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
-    const dots = pts.map(p=>'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.5" fill="'+color+'"/>').join('');
-    return '<path d="'+line+'" fill="none" stroke="'+color+'" stroke-width="1.8"/>'+dots;
-  }
-  // grid: 4 horizontal lines + labels
-  let grid = '';
-  for(let i=0; i<=3; i++){
-    const v = yMin + yRange * (1 - i/3);
-    const y = padT + (i/3) * (H - padT - padB);
-    grid += '<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="#eee" stroke-width="1"/>'
-         + '<text x="4" y="'+(y+4)+'" font-size="9" font-family="DM Mono,monospace" fill="#888">'+v.toFixed(1)+'</text>';
-  }
-  const ACC = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#0f0f0e';
-  const W2  = getComputedStyle(document.documentElement).getPropertyValue('--text3').trim() || '#8a8a86';
-  // goal lines
-  const goals = loadGoals();
-  let goalSvg = '';
-  function goalLine(v, color, label){
-    if(typeof v !== 'number' || v < yMin || v > yMax) return '';
-    const y = py(v);
-    return '<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="'+color+'" stroke-width="1" stroke-dasharray="4 4" opacity="0.7"/>'
-         + '<text x="'+(W-padR-2)+'" y="'+(y-4)+'" text-anchor="end" class="body-goal-label">'+label+' '+v.toFixed(1)+'</text>';
-  }
-  goalSvg += goalLine(goals.weight, ACC, 'GOAL');
-  goalSvg += goalLine(goals.waist,  W2,  'GOAL');
-  svg.innerHTML = grid + goalSvg + pathFor('weight', ACC) + pathFor('waist', W2);
-}
-
 /* ---------- settings modal ---------- */
 function openSettings(){
   const dlg = document.getElementById('settingsModal');
   const start = getStartDate();
   document.getElementById('settingsCurrent').textContent = ymd(start)+'（'+mmdd(start)+'）';
   document.getElementById('settingsStartDate').value = ymd(start);
-  const g = loadGoals();
-  const gw = document.getElementById('goalWeight'); if(gw) gw.value = (g.weight != null ? g.weight : '');
-  const gws = document.getElementById('goalWaist'); if(gws) gws.value = (g.waist != null ? g.waist : '');
   if(typeof dlg.showModal === 'function'){dlg.showModal();}
   else{dlg.setAttribute('open','');}
 }
@@ -1750,7 +1610,6 @@ function clearAllData(){
   if(!confirm('食事記録・体重記録・開始日のすべてをこの端末から削除します。元に戻せません。本当に削除しますか？')) return;
   try{
     localStorage.removeItem(K_MEAL);
-    localStorage.removeItem(K_BODY);
     localStorage.removeItem(K_SETTINGS);
     localStorage.removeItem(K_LEGACY);
   }catch(e){}
@@ -1762,13 +1621,10 @@ function clearAllData(){
 
 /* ---------- check-in storage ---------- */
 const K_CHECKIN = 'fl_checkin_v1';
-const K_GOALS   = 'fl_goals_v1';
 const K_MS_SEEN = 'fl_milestones_v1';
 const CI_KEYS = ['protein','light','active'];
 function loadCheckin(){ try{return JSON.parse(localStorage.getItem(K_CHECKIN))||{};}catch(e){return {};} }
 function saveCheckinAll(o){ try{localStorage.setItem(K_CHECKIN, JSON.stringify(o));}catch(e){} }
-function loadGoals(){ try{return JSON.parse(localStorage.getItem(K_GOALS))||{};}catch(e){return {};} }
-function saveGoalsRaw(o){ try{localStorage.setItem(K_GOALS, JSON.stringify(o));}catch(e){} }
 function loadMsSeen(){ try{return JSON.parse(localStorage.getItem(K_MS_SEEN))||{};}catch(e){return {};} }
 function saveMsSeen(o){ try{localStorage.setItem(K_MS_SEEN, JSON.stringify(o));}catch(e){} }
 
@@ -1805,10 +1661,10 @@ function renderHub(){
   const fg = document.getElementById('hubRingFg');
   if(num) num.textContent = inRange ? String(n) : (n < 1 ? 'START' : 'DONE');
   if(title) title.textContent = mmdd(today) + '（' + WD[today.getDay()] + '）';
-  if(greet) greet.textContent = hubGreeting() + ' · DAY ' + (inRange ? n : '-');
+  if(greet) greet.textContent = hubGreeting();
   // ring
   if(fg){
-    const C = 2 * Math.PI * 42;
+    const C = 2 * Math.PI * 48;
     const pct = inRange ? n / TOTAL_DAYS : (n < 1 ? 0 : 1);
     fg.setAttribute('stroke-dasharray', String(C));
     fg.setAttribute('stroke-dashoffset', String(C * (1 - pct)));
@@ -1840,15 +1696,12 @@ function cellFillLevel(dayN){
   const k = ymd(d);
   const meals = loadMeal()[k] || {};
   const checks = loadCheckin()[k] || {};
-  const body = loadBody()[k] || {};
   const mealAny = !!(meals.morning||meals.lunch||meals.dinner||meals.snack||meals.exercise||meals.note);
   const ciDone = CI_KEYS.filter(k=>checks[k]).length;
-  const hasBody = (typeof body.weight==='number') || (typeof body.waist==='number');
   let pts = 0;
   if(mealAny) pts++;
   if(ciDone >= 1) pts++;
   if(ciDone >= 3) pts++;
-  if(hasBody) pts++;
   // pts in 0..4. Normalize to 0..3
   if(pts >= 3) return 3;
   if(pts === 2) return 2;
@@ -1882,17 +1735,6 @@ function renderHeatmap(){
 }
 
 /* ---------- goals ---------- */
-function saveGoals(){
-  const gw = parseFloat(document.getElementById('goalWeight').value);
-  const ws = parseFloat(document.getElementById('goalWaist').value);
-  const g = loadGoals();
-  g.weight = isNaN(gw) ? null : gw;
-  g.waist  = isNaN(ws) ? null : ws;
-  saveGoalsRaw(g);
-  toast('目標を保存しました');
-  renderBodyChart();
-}
-
 /* ---------- milestones ---------- */
 function checkMilestone(){
   const today = todayDate();
@@ -1905,8 +1747,7 @@ function checkMilestone(){
   const k = ymd(today);
   const meal = loadMeal()[k] || {};
   const ci = loadCheckin()[k] || {};
-  const body = loadBody()[k] || {};
-  const hasAny = (meal.morning||meal.lunch||meal.dinner||meal.snack||meal.exercise||meal.note) || CI_KEYS.some(x=>ci[x]) || typeof body.weight==='number' || typeof body.waist==='number';
+  const hasAny = (meal.morning||meal.lunch||meal.dinner||meal.snack||meal.exercise||meal.note) || CI_KEYS.some(x=>ci[x]);
   if(!hasAny) return;
   seen[n] = ymd(today);
   saveMsSeen(seen);
@@ -1953,8 +1794,7 @@ function calcStreak(){
     const k = ymd(d);
     const m = loadMeal()[k] || {};
     const c = loadCheckin()[k] || {};
-    const b = loadBody()[k] || {};
-    const has = (m.morning||m.lunch||m.dinner||m.snack||m.exercise||m.note) || CI_KEYS.some(x=>c[x]) || typeof b.weight==='number' || typeof b.waist==='number';
+    const has = (m.morning||m.lunch||m.dinner||m.snack||m.exercise||m.note) || CI_KEYS.some(x=>c[x]);
     if(!has) break;
     streak++;
     d.setDate(d.getDate() - 1);
@@ -1969,16 +1809,12 @@ function fullRefresh(){
   renderHub();
   renderHeatmap();
   buildDaySelector();
-  renderBodyChart();
 }
 
 /* ---------- init ---------- */
 (function init(){
   migrateLegacy();
   getStartDate();
-  // default body-date to today
-  const bd = document.getElementById('bodyDate');
-  if(bd) bd.value = ymd(todayDate());
   fullRefresh();
   // Auto-jump to today's week on first load
   const today = todayDate(), n = dateToDay(today);
