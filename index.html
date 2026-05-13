@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="fitness-log">
+<meta name="theme-color" content="#f5f5f3">
+<title>fitness-log — 28日プラン</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f5f5f3;--card:#fff;--card2:#f0f0ee;
+  --border:#e2e2de;--border2:#c8c8c4;
+  --accent:#aaff00;--accent-dark:#6db800;
+  --w1:#aaff00;--w2:#0088bb;--w3:#dd6600;--w4:#6600bb;
+  --text:#111;--text2:#444;--text3:#888;
+  --office-bg:#eef6ff;--office-bd:#aaccee;
+  --prep-bg:#fff8e8;--prep-bd:#e8cc88;
+  --sidebar:260px;
+}
+html{font-size:16px}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--card);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;padding:32px 0 24px;overflow-y:auto;z-index:50}
+.sidebar-logo{padding:0 24px 24px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.sidebar-badge{display:inline-block;background:var(--accent);color:#111;font-size:10px;font-family:'DM Mono',monospace;font-weight:700;letter-spacing:0.12em;padding:4px 10px;border-radius:100px;margin-bottom:10px}
+.sidebar-title{font-size:18px;font-weight:700;line-height:1.25;letter-spacing:-0.02em}
+.sidebar-title em{font-style:normal;color:var(--accent-dark)}
+.sidebar-sub{margin-top:6px;font-size:12px;color:var(--text3)}
+.sidebar-today{margin:0 16px 16px;background:var(--text);border-radius:12px;padding:14px 16px;cursor:pointer;border:none;width:calc(100% - 32px);text-align:left;transition:opacity 0.15s}
+.sidebar-today:hover{opacity:0.88}
+.sidebar-today-label{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:0.1em;color:var(--accent);font-weight:700;margin-bottom:4px}
+.sidebar-today-date{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:#fff}
+.sidebar-today-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
+.sidebar-stats{padding:0 16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sidebar-stat{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center}
+.sidebar-stat-n{font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--text)}
+.sidebar-stat-l{font-size:9px;color:var(--text3);margin-top:3px}
+.sidebar-nav{padding:0 12px;flex:1}
+.sidebar-nav-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--text3);padding:0 8px;margin-bottom:8px;margin-top:4px}
+.snav-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:none;background:transparent;cursor:pointer;font-family:'Noto Sans JP',sans-serif;color:var(--text2);transition:all 0.15s;text-align:left;margin-bottom:2px}
+.snav-btn:hover{background:var(--card2)}
+.snav-btn.active{background:var(--text);color:#fff}
+.snav-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.snav-btn[data-w="1"] .snav-pip{background:var(--accent-dark)}
+.snav-btn[data-w="2"] .snav-pip{background:var(--w2)}
+.snav-btn[data-w="3"] .snav-pip{background:var(--w3)}
+.snav-btn[data-w="4"] .snav-pip{background:var(--w4)}
+.snav-btn.active .snav-pip{background:var(--accent)}
+.snav-btn[data-w="r"] .snav-pip{background:#aaa}
+.snav-text{flex:1}
+.snav-week{font-size:13px;font-weight:600}
+.snav-range{font-size:10px;color:var(--text3);margin-top:1px;font-family:'DM Mono',monospace}
+.snav-btn.active .snav-range{color:rgba(255,255,255,0.5)}
+
+
+/* MAIN */
+.main{flex:1;margin-left:var(--sidebar);min-width:0;padding:40px 40px 60px}
+.topbar{display:none;position:sticky;top:0;z-index:100;background:rgba(245,245,243,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 16px;align-items:center;justify-content:space-between;gap:12px}
+.topbar-title{font-size:15px;font-weight:700}
+.topbar-today{background:var(--text);color:var(--accent);border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-family:'DM Mono',monospace;font-weight:700;letter-spacing:0.06em;cursor:pointer}
+.mobile-tabs{display:none;padding:0 16px;margin-bottom:16px}
+.mobile-tabs-inner{display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border:1px solid var(--border);border-radius:12px;padding:3px;gap:3px}
+.mtab{padding:9px 4px;border-radius:8px;border:none;background:transparent;color:var(--text3);font-size:12px;font-weight:500;font-family:'Noto Sans JP',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;line-height:1.2}
+.mtab small{display:block;font-size:9px;font-family:'DM Mono',monospace;letter-spacing:0.05em;margin-top:1px;opacity:0.65}
+.mtab.active{color:#111;font-weight:700}
+.mtab[data-w="1"].active{background:var(--accent)}
+.mtab[data-w="2"].active{background:var(--w2);color:#fff}
+.mtab[data-w="3"].active{background:var(--w3);color:#fff}
+.mtab[data-w="4"].active{background:var(--w4);color:#fff}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(245,245,243,0.96);backdrop-filter:blur(16px);border-top:1px solid var(--border);padding:8px 12px calc(8px + env(safe-area-inset-bottom));z-index:100}
+.bnav-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:480px;margin:0 auto}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text3);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.15s;gap:1px}
+.bnav-btn span{font-size:12px;font-weight:700}
+.bnav-btn small{font-size:8px;font-family:'DM Mono',monospace;letter-spacing:0.05em}
+.bnav-btn.active{color:#111;border-color:transparent}
+.bnav-btn[data-w="1"].active{background:var(--accent)}
+.bnav-btn[data-w="2"].active{background:var(--w2);color:#fff}
+.bnav-btn[data-w="3"].active{background:var(--w3);color:#fff}
+.bnav-btn[data-w="4"].active{background:var(--w4);color:#fff}
+.toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-60px);background:var(--text);color:var(--accent);font-size:13px;font-weight:700;font-family:'DM Mono',monospace;padding:9px 18px;border-radius:100px;z-index:300;transition:transform 0.28s ease;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* PANELS */
+.panel{display:none}.panel.active{display:block}
+.week-header{border-radius:14px;padding:20px 24px;margin-bottom:20px;border:1px solid transparent;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.wh-label{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:0.12em;opacity:0.6;margin-bottom:5px}
+.wh-title{font-size:22px;font-weight:700}
+.wh-theme{font-size:13px;opacity:0.72;margin-top:4px}
+.wh-tag{flex-shrink:0;font-size:10px;font-family:'DM Mono',monospace;padding:5px 12px;border-radius:100px;background:rgba(0,0,0,0.1);white-space:nowrap;margin-top:2px;font-weight:700}
+[data-panel="1"] .week-header{background:#e8ff99;border-color:#c4ee00;color:#2a4400}
+[data-panel="2"] .week-header{background:#d0f0ff;border-color:#7bc8ee;color:#003355}
+[data-panel="3"] .week-header{background:#fff0d8;border-color:#eebb77;color:#553300}
+[data-panel="4"] .week-header{background:#f0d8ff;border-color:#bb77ee;color:#330055}
+
+/* PREP BOX */
+.prep-box{background:var(--prep-bg);border:1px solid var(--prep-bd);border-radius:12px;padding:14px 16px;margin-bottom:20px}
+.prep-box-title{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.12em;color:#886600;margin-bottom:10px}
+.prep-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prep-col-title{font-size:11px;font-weight:700;color:#664400;margin-bottom:6px}
+.prep-item{font-size:12px;color:#554400;line-height:1.7;padding-left:10px;position:relative}
+.prep-item::before{content:'·';position:absolute;left:0}
+
+/* DAY GRID */
+.day-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.day-grid .span-full{grid-column:1/-1}
+.day-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color 0.18s,box-shadow 0.18s}
+.day-card:hover{border-color:var(--border2);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.day-card.today-highlight{border-color:var(--accent-dark);border-width:2px;box-shadow:0 0 0 3px rgba(170,255,0,0.15)}
+.day-card.today-highlight .day-toggle{background:#f5ffe0}
+.today-pill{display:inline-block;background:var(--accent);color:#111;font-size:9px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:0.06em;padding:2px 7px;border-radius:100px;margin-left:6px;vertical-align:middle}
+.day-toggle{width:100%;display:flex;align-items:center;gap:12px;padding:15px 18px;background:none;border:none;cursor:pointer;text-align:left;color:var(--text);min-height:60px}
+.day-pip{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+[data-panel="1"] .day-pip{background:var(--accent-dark)}
+[data-panel="2"] .day-pip{background:var(--w2)}
+[data-panel="3"] .day-pip{background:var(--w3)}
+[data-panel="4"] .day-pip{background:var(--w4)}
+.day-info{flex:1;min-width:0}
+.day-name{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.day-meta{font-size:11px;color:var(--text2);margin-top:3px}
+.office-tag{font-size:10px;color:#0066aa;background:#ddeeff;padding:2px 7px;border-radius:5px;font-weight:700;font-family:'DM Mono',monospace}
+.day-arr{width:26px;height:26px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.2s;font-size:12px;color:var(--text3)}
+.day-card.open .day-arr{transform:rotate(180deg);background:var(--border2)}
+.day-body{display:none;padding:0 18px 16px;border-top:1px solid var(--border)}
+.day-card.open .day-body{display:block}
+
+/* OFFICE SCHEDULE */
+.office-banner{background:var(--office-bg);border:1px solid var(--office-bd);border-radius:10px;padding:11px 14px;margin:14px 0 0}
+.office-banner-title{font-size:10px;font-family:'DM Mono',monospace;font-weight:700;letter-spacing:0.1em;color:#0066aa;margin-bottom:6px}
+.office-sched{font-size:12px;color:#334;line-height:2}
+.office-sched b{display:inline-block;background:rgba(0,100,170,0.1);border-radius:4px;padding:0 5px;margin-right:3px;font-family:'DM Mono',monospace;font-size:10px;color:#0066aa;font-weight:700}
+
+/* MEAL */
+.meal-section{margin-top:12px}
+.meal-row{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.meal-row:last-child{border-bottom:none;padding-bottom:0}
+.ml{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--text3);padding-top:2px;width:50px;flex-shrink:0;line-height:1.4}
+.mc{flex:1;font-size:13px;line-height:1.65;color:var(--text2)}
+.mc strong{color:var(--text);font-weight:600}
+.kcal{display:block;margin-top:2px;font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)}
+
+/* EXERCISE */
+.ex-block{margin-top:12px;border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent-dark);background:#f0ffcc}
+[data-panel="2"] .ex-block{border-left-color:var(--w2);background:#e0f4ff}
+[data-panel="3"] .ex-block{border-left-color:var(--w3);background:#fff3e0}
+[data-panel="4"] .ex-block{border-left-color:var(--w4);background:#f5e8ff}
+.ex-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--accent-dark);margin-bottom:8px;font-weight:700}
+[data-panel="2"] .ex-title{color:var(--w2)}
+[data-panel="3"] .ex-title{color:var(--w3)}
+[data-panel="4"] .ex-title{color:var(--w4)}
+.ex-list{display:flex;flex-wrap:wrap;gap:6px}
+.ex-item{font-size:12px;color:var(--text);background:rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.08);padding:5px 10px;border-radius:7px;line-height:1.3;font-weight:500}
+.ex-item.new{border-color:var(--accent-dark);background:#e8ffa0;color:#2a4400}
+
+.rest-block{margin-top:12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:12px;color:var(--text2);line-height:1.65}
+
+/* CAL ADD BTN */
+.cal-add-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:8px 14px;background:var(--card2);border:1px solid var(--border2);border-radius:8px;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.15s}
+.cal-add-btn:hover{background:var(--accent);border-color:var(--accent-dark);color:#111}
+
+/* TIPS */
+.tips-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--text3);margin-bottom:10px}
+.tips-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:32px}
+.tip-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 12px}
+.tip-t{font-size:12px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.tip-d{font-size:11px;color:var(--text2);line-height:1.6}
+
+/* RECORD */
+.record-header{margin-bottom:24px}
+.record-title{font-size:22px;font-weight:700;margin-bottom:4px}
+.record-sub{font-size:13px;color:var(--text3)}
+.record-day-select{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.rday-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;transition:all 0.15s;font-weight:500}
+.rday-btn:hover{border-color:var(--border2)}
+.rday-btn.active{background:var(--text);color:var(--accent);border-color:var(--text);font-weight:700}
+.record-form{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.record-form-title{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.record-form-title span{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);font-weight:400}
+.meal-input-group{margin-bottom:14px}
+.meal-input-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--text3);margin-bottom:5px}
+.meal-input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border-color 0.15s;resize:none}
+.meal-input:focus{border-color:var(--accent-dark)}
+.record-save-btn{width:100%;padding:12px;background:var(--text);color:var(--accent);border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer;margin-top:6px;transition:opacity 0.15s}
+.record-save-btn:hover{opacity:0.88}
+.record-log{margin-top:24px}
+.record-log-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--text3);margin-bottom:12px}
+.log-empty{font-size:13px;color:var(--text3);padding:20px 0;text-align:center}
+.log-entry{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.log-entry-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.log-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:2px 6px;border-radius:4px;transition:color 0.15s}
+.log-del:hover{color:#cc0000}
+.log-meal{font-size:13px;color:var(--text2);line-height:1.7}
+.log-meal b{color:var(--text);font-weight:600}
+.log-note{margin-top:6px;font-size:12px;color:var(--text3);font-style:italic}
+
+/* PROGRESS BAR (inside TODAY box) */
+.progress-row{margin-top:10px;display:flex;align-items:center;gap:8px}
+.progress-bar{flex:1;height:4px;background:rgba(255,255,255,0.18);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);transition:width 0.4s}
+.progress-text{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.7);letter-spacing:0.06em}
+
+/* SETTINGS BUTTON */
+.settings-btn{margin:8px 16px 0;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;width:calc(100% - 32px);display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:600;transition:background 0.15s}
+.settings-btn:hover{background:var(--card)}
+.settings-btn svg{flex-shrink:0}
+.topbar-settings{background:none;border:none;cursor:pointer;color:var(--text2);padding:4px;display:flex;align-items:center}
+.topbar-day{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.06em;margin-right:4px}
+
+/* SETTINGS DIALOG */
+.settings-dialog{border:none;border-radius:14px;padding:0;background:var(--card);color:var(--text);max-width:420px;width:calc(100% - 32px);box-shadow:0 18px 60px rgba(0,0,0,0.25)}
+.settings-dialog::backdrop{background:rgba(0,0,0,0.4)}
+.settings-head{padding:18px 22px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.settings-title{font-size:15px;font-weight:700}
+.settings-close{background:none;border:none;font-size:22px;color:var(--text3);cursor:pointer;line-height:1;padding:0 4px}
+.settings-body{padding:18px 22px 22px}
+.settings-row{margin-bottom:18px}
+.settings-row:last-child{margin-bottom:0}
+.settings-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--text3);margin-bottom:6px}
+.settings-current{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.settings-input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);outline:none;-webkit-appearance:none}
+.settings-input:focus{border-color:var(--accent-dark)}
+.settings-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.settings-btn-primary{padding:10px;background:var(--text);color:var(--accent);border:none;border-radius:8px;font-size:12px;font-weight:700;font-family:'Noto Sans JP',sans-serif;cursor:pointer}
+.settings-btn-secondary{padding:10px;background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;font-family:'Noto Sans JP',sans-serif;cursor:pointer}
+.settings-btn-danger{padding:10px;background:transparent;color:#cc0000;border:1px solid #cc000033;border-radius:8px;font-size:12px;font-weight:600;font-family:'Noto Sans JP',sans-serif;cursor:pointer;grid-column:1/-1}
+.settings-note{font-size:11px;color:var(--text3);line-height:1.6;margin-top:8px}
+
+/* BODY TRACKER */
+.body-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px}
+.body-section-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.body-section-title span{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);font-weight:400}
+.body-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:14px}
+.body-input{padding:9px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);outline:none;width:100%;-webkit-appearance:none}
+.body-input:focus{border-color:var(--accent-dark)}
+.body-input-wrap{display:flex;flex-direction:column;gap:3px}
+.body-input-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:0.08em}
+.body-save-btn{padding:9px 14px;background:var(--text);color:var(--accent);border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;height:34px;font-family:'Noto Sans JP',sans-serif}
+.body-chart{width:100%;height:160px;display:block;margin-top:6px}
+.body-chart-empty{font-size:12px;color:var(--text3);text-align:center;padding:30px 0}
+.body-legend{display:flex;gap:14px;font-size:11px;color:var(--text2);margin-top:6px;justify-content:center}
+.body-legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:0 0 90px}
+  .topbar{display:flex}
+  .mobile-tabs{display:block}
+  .bottom-nav{display:block}
+  .bnav-inner{grid-template-columns:repeat(5,1fr)}
+  .day-grid{grid-template-columns:1fr}
+  .tips-grid{grid-template-columns:1fr 1fr}
+  .prep-cols{grid-template-columns:1fr}
+  .week-header{padding:16px 18px}.wh-title{font-size:18px}
+  .content-inner{padding:0 16px}
+  .record-form{padding:16px}
+  .body-section{padding:16px}
+  .body-form{grid-template-columns:1fr 1fr;gap:8px}
+  .body-form .body-input-wrap:first-child{grid-column:1/-1}
+  .body-save-btn{grid-column:1/-1;height:38px}
+  /* Settings dialog as bottom-sheet */
+  .settings-dialog{max-width:100%;width:100%;border-radius:16px 16px 0 0;margin:auto 0 0;position:fixed;bottom:0;left:0;right:0;top:auto;transform:none}
+  .topbar-day{display:none}
+  .topbar-today{padding:6px 9px;font-size:10px}
+}
+@media(max-width:380px){
+  .bnav-btn span{font-size:11px}
+  .bnav-btn small{font-size:7px}
+}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-badge">28-DAY PLAN</div>
+    <div class="sidebar-title">食事 × 運動<br><em>28日プログラム</em></div>
+    <div class="sidebar-sub" id="planRange">--/-- → --/--</div>
+  </div>
+  <button class="sidebar-today" onclick="goToday()">
+    <div class="sidebar-today-label">TODAY — タップして表示</div>
+    <div class="sidebar-today-date" id="pc-today-date">--/--</div>
+    <div class="sidebar-today-sub" id="pc-today-label"></div>
+    <div class="progress-row">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-text" id="progressText">0 / 28</div>
+    </div>
+  </button>
+  <div class="sidebar-stats">
+    <div class="sidebar-stat"><div class="sidebar-stat-n" id="statDay">--</div><div class="sidebar-stat-l">DAY / 28</div></div>
+    <div class="sidebar-stat"><div class="sidebar-stat-n" id="streakStat">0</div><div class="sidebar-stat-l">連続記録 (日)</div></div>
+    <div class="sidebar-stat"><div class="sidebar-stat-n" style="color:var(--w2)">1700</div><div class="sidebar-stat-l">kcal目標</div></div>
+    <div class="sidebar-stat"><div class="sidebar-stat-n" style="color:var(--w3)">週2</div><div class="sidebar-stat-l">筋トレ</div></div>
+  </div>
+  <button class="settings-btn" onclick="openSettings()" aria-label="設定">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    設定 · 開始日変更
+  </button>
+  <div class="sidebar-nav" style="margin-top:16px">
+    <div class="sidebar-nav-label">WEEK PLAN</div>
+    <button class="snav-btn active" data-w="1" onclick="sw(1)">
+      <div class="snav-pip"></div>
+      <div class="snav-text"><div class="snav-week">Week 1 — 基盤づくり</div><div class="snav-range" id="wRange1">--/-- 〜 --/--</div></div>
+    </button>
+    <button class="snav-btn" data-w="2" onclick="sw(2)">
+      <div class="snav-pip"></div>
+      <div class="snav-text"><div class="snav-week">Week 2 — 質の向上</div><div class="snav-range" id="wRange2">--/-- 〜 --/--</div></div>
+    </button>
+    <button class="snav-btn" data-w="3" onclick="sw(3)">
+      <div class="snav-pip"></div>
+      <div class="snav-text"><div class="snav-week">Week 3 — 強化フェーズ</div><div class="snav-range" id="wRange3">--/-- 〜 --/--</div></div>
+    </button>
+    <button class="snav-btn" data-w="4" onclick="sw(4)">
+      <div class="snav-pip"></div>
+      <div class="snav-text"><div class="snav-week">Week 4 — 定着</div><div class="snav-range" id="wRange4">--/-- 〜 --/--</div></div>
+    </button>
+    <div class="sidebar-nav-label" style="margin-top:14px">RECORD</div>
+    <button class="snav-btn" data-w="r" onclick="sw('r')">
+      <div class="snav-pip"></div>
+      <div class="snav-text"><div class="snav-week">食事記録</div><div class="snav-range">毎日の記録</div></div>
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">28日プラン</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="topbar-day" id="mobDay">DAY -- / 28</span>
+      <button class="topbar-today" onclick="goToday()">TODAY <span id="mob-today-label"></span></button>
+      <button class="topbar-settings" onclick="openSettings()" aria-label="設定">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-tabs">
+    <div class="mobile-tabs-inner">
+      <button class="mtab active" data-w="1" onclick="sw(1)">W1<small>基盤</small></button>
+      <button class="mtab" data-w="2" onclick="sw(2)">W2<small>質UP</small></button>
+      <button class="mtab" data-w="3" onclick="sw(3)">W3<small>強化</small></button>
+      <button class="mtab" data-w="4" onclick="sw(4)">W4<small>定着</small></button>
+    </div>
+  </div>
+  <div class="content-inner">
+
+  <!-- ===== W1 ===== -->
+  <div class="panel active" id="p1" data-panel="1">
+    <div class="week-header">
+      <div><div class="wh-label">WEEK 1 · <span id="whRange1">--/--〜--/--</span></div><div class="wh-title">記録と可視化</div><div class="wh-theme">食習慣を知ることから始める週</div></div>
+      <div class="wh-tag">基盤づくり</div>
+    </div>
+
+    <div class="prep-box">
+      <div class="prep-box-title">WEEKLY PREP — 週始めにまとめて準備</div>
+      <div class="prep-cols">
+        <div>
+          <div class="prep-col-title">週の食材（コンビニ・スーパー）</div>
+          <div class="prep-item">サラダチキン（ほぐし型）× 5〜6パック</div>
+          <div class="prep-item">サラダチキンバー × 5本</div>
+          <div class="prep-item">ギリシャヨーグルト × 4〜5個</div>
+          <div class="prep-item">素焼きナッツ（袋）</div>
+          <div class="prep-item">6Pチーズ × 1箱</div>
+          <div class="prep-item">おにぎり用冷凍ご飯 or コンビニおにぎり</div>
+          <div class="prep-item">レトルト味噌汁 × 1箱</div>
+          <div class="prep-item">バナナ 1房</div>
+        </div>
+        <div>
+          <div class="prep-col-title">作り置きできるもの（週末10分）</div>
+          <div class="prep-item">ゆで卵 × 6個（冷蔵5日保存OK）</div>
+          <div class="prep-item">鶏むね肉の塩茹で（薄切り冷蔵3日）</div>
+          <div class="prep-item">カット野菜（キャベツ千切り等、冷蔵3日）</div>
+          <div class="prep-item">ほうれん草おひたし（冷蔵3日）</div>
+          <div class="prep-item">きのこのスープ（鍋ごと冷蔵3日）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-grid">
+
+      <div class="day-card" data-day="1">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span>スタート日</div><div class="day-meta">準備 + 軽め筋トレ</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">準備</div><div class="mc"><strong>作り置きをする日</strong><br>鶏むね塩茹で・ゆで卵・ブロッコリー茹で・味噌汁を仕込む</div></div>
+            <div class="meal-row"><div class="ml">食事</div><div class="mc">今日は自由。作り置き食材で軽く食べてもOK</div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">DAY 1 WORKOUT · 20分（器具慣らし）</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 3回×3（グリップ確認）</span>
+              <span class="ex-item new">ダンベルカール 10回×3（5kg）</span>
+              <span class="ex-item">プランク 30秒×3</span>
+              <span class="ex-item">スクワット 15回×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(1)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="2">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">外出予定 · 外食予定</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">外出予定日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>軽め <b>昼</b>外食 <b>午後</b>間食 <b>夜</b>軽め</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>作り置き鶏むね + ギリシャヨーグルト</strong><br>冷蔵庫から出すだけ<span class="kcal">約240kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食：野菜から食べ始めるだけ</strong><br>何でもOK。汁物・サラダを先に食べる<span class="kcal">約650kcal</span></div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ or チーズ1個</strong><br>夜のドカ食い防止に必須<span class="kcal">約100kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>夜：作り置き鶏むね + きのこスープ + ほうれん草</strong><br>炭水化物なし・冷蔵庫から出すだけ<span class="kcal">約380kcal</span></div></div>
+          </div>
+          <div class="rest-block"><strong>外出日の鉄則：</strong>昼は自由。午後に間食。夜は炭水化物なし。</div>
+          <button class="cal-add-btn" onclick="addToCalendar(2)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="3">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">ウォーキング + 休養</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ギリシャヨーグルト + バナナ</strong><span class="kcal">約230kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食 or 作り置き：定食系 or 鶏むね + 野菜</strong><span class="kcal">約580kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き：鶏むね + ほうれん草おひたし + 味噌汁</strong><span class="kcal">約380kcal</span></div></div>
+          </div>
+          <div class="rest-block">歩数目標 8,000歩。昼休みに10分歩くだけでも可。</div>
+          <button class="cal-add-btn" onclick="addToCalendar(3)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="4">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">筋トレの日</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>サラダチキンバー + ギリシャヨーグルト</strong><span class="kcal">約220kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食 or 作り置き定食</strong><span class="kcal">約600kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き：鶏むね + きのこスープ + おにぎり1個</strong><span class="kcal">約420kcal</span></div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">WORKOUT · 25分</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 4回×3</span>
+              <span class="ex-item new">ダンベルベントオーバーロウ 12回×3（5kg）</span>
+              <span class="ex-item new">ダンベルショルダープレス 10回×3（5kg）</span>
+              <span class="ex-item">腕立て 10回×3</span>
+              <span class="ex-item">プランク 40秒×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(4)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="5">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">外出予定 · 自由日</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">外出予定日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>軽め <b>昼</b>外食 <b>午後</b>間食 <b>夜</b>軽め</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>作り置き鶏むね + ヨーグルト</strong><span class="kcal">約240kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食自由（自由日）</strong><br>食べる前に水1杯だけ意識する<span class="kcal">〜700kcal</span></div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ or チーズ</strong><span class="kcal">約100kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>夜：軽め</strong><br>お酒ならハイボール・焼酎。炭水化物は控えめに<span class="kcal">約400kcal</span></div></div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(5)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="6">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">週末筋トレ強化版</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ゆで卵2個（作り置き）+ ヨーグルト</strong><span class="kcal">約240kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc">好きなもの。夜を軽くする調整でOK<span class="kcal">〜700kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き：鶏むね + 味噌汁 + 野菜</strong><span class="kcal">約350kcal</span></div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">WEEKEND WORKOUT · 30分（フル装備）</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 5回×4</span>
+              <span class="ex-item new">ダンベルルーマニアンデッドリフト 12回×3（5kg×2）</span>
+              <span class="ex-item new">ダンベルスクワット 15回×3（5kg×2）</span>
+              <span class="ex-item new">ダンベルカール 12回×3（5kg）</span>
+              <span class="ex-item">プランク 45秒×3</span>
+              <span class="ex-item">腹筋 20回×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(6)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="7">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">完全休息 + 翌週仕込み</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">食事</div><div class="mc">好きなもの。タンパク質だけ意識する。</div></div>
+            <div class="meal-row"><div class="ml">仕込み</div><div class="mc"><strong>翌週分の作り置きを仕込む</strong><br>鶏むね塩茹で・ゆで卵・きのこスープ。週の食事が楽になる。</div></div>
+          </div>
+          <div class="rest-block">運動なし。よく眠る。翌週の準備日として使う。</div>
+          <button class="cal-add-btn" onclick="addToCalendar(7)">カレンダーに追加</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="tips-label">WEEK 1 のルール</div>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-t">週始めに仕込む</div><div class="tip-d">鶏むね塩茹で・ゆで卵・きのこスープを日曜に作るだけ。平日の食事が格段に楽になる。</div></div>
+      <div class="tip-card"><div class="tip-t">食前に水を飲む</div><div class="tip-d">食事5分前にコップ1杯。これだけで食べる量が自然に減る。</div></div>
+      <div class="tip-card"><div class="tip-t">懸垂から始める</div><div class="tip-d">最初は3回でもOK。懸垂は背中・二頭・体幹を一度に鍛える最強種目。</div></div>
+      <div class="tip-card"><div class="tip-t">外出日の鉄則</div><div class="tip-d">昼は自由。午後に間食。夜は炭水化物なし。この3つだけ守る。</div></div>
+    </div>
+  </div>
+
+  <!-- ===== W2 ===== -->
+  <div class="panel" id="p2" data-panel="2">
+    <div class="week-header">
+      <div><div class="wh-label">WEEK 2 · <span id="whRange2">--/--〜--/--</span></div><div class="wh-title">食事の質を上げる</div><div class="wh-theme">筋トレを定着させる週</div></div>
+      <div class="wh-tag">質の向上</div>
+    </div>
+    <div class="prep-box">
+      <div class="prep-box-title">WEEKLY PREP — 週始めにまとめて準備</div>
+      <div class="prep-cols">
+        <div>
+          <div class="prep-col-title">週の食材（日曜or月曜）</div>
+          <div class="prep-item">鶏むね肉 400〜500g</div>
+          <div class="prep-item">卵 6個</div>
+          <div class="prep-item">ブロッコリー 1株</div>
+          <div class="prep-item">ほうれん草 1袋</div>
+          <div class="prep-item">きのこ（しめじ・えのき等）</div>
+          <div class="prep-item">ギリシャヨーグルト×4、ナッツ、チーズ</div>
+        </div>
+        <div>
+          <div class="prep-col-title">作り置き（日曜30分）</div>
+          <div class="prep-item">鶏むね塩茹で（週5日分）</div>
+          <div class="prep-item">ゆで卵×6（冷蔵5日）</div>
+          <div class="prep-item">ブロッコリー蒸し（冷蔵4日）</div>
+          <div class="prep-item">きのこスープ（冷蔵4日）</div>
+          <div class="prep-item">おひたし（ほうれん草 冷蔵3日）</div>
+        </div>
+      </div>
+    </div>
+    <div class="day-grid">
+
+      <div class="day-card" data-day="8">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">筋トレ（負荷UP）</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ゆで卵2個（作り置き）+ ヨーグルト</strong><span class="kcal">約230kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食：野菜から食べ始める</strong><span class="kcal">約580kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>鶏むね + ブロッコリー蒸し + きのこスープ</strong><span class="kcal">約360kcal</span></div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">WORKOUT · 30分（負荷UP）</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 5回×4</span>
+              <span class="ex-item new">ダンベルベントオーバーロウ 12回×3</span>
+              <span class="ex-item new">ダンベルショルダープレス 12回×3</span>
+              <span class="ex-item">腕立て 15回×3</span>
+              <span class="ex-item">プランク 45秒×3</span>
+              <span class="ex-item">腹筋 25回×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(8)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="9">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">外出予定</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">外出予定日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>軽め <b>昼</b>外食 <b>午後</b>間食 <b>夜</b>軽め</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ゆで卵2個 + サラダチキンバー</strong><span class="kcal">約260kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食：野菜→タンパク質→炭水化物の順</strong><span class="kcal">約600kcal</span></div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ25g or チーズ</strong><span class="kcal">約120kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き：鶏むね + ブロッコリー + スープ</strong><br>炭水化物なし<span class="kcal">約360kcal</span></div></div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(9)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="10">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">早めの帰宅予定 · 昼が軽い日</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">昼が軽くなる日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>しっかり <b>昼</b>軽め <b>夜</b>普通</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>しっかり食べる（昼が少ないので）</strong><br>鶏むね + ヨーグルト + バナナ<span class="kcal">約380kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>軽めでOK：おにぎり1個 + サラダチキンバー</strong><br>食べれなくても焦らない。朝でカバー済み<span class="kcal">約280kcal</span></div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ or チーズ</strong><br>帰宅前に補給して夜のドカ食い防止<span class="kcal">約120kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>早めの夜：しっかり食べてOK</strong><br>作り置き鶏むね + 野菜 + ご飯少量<span class="kcal">約500kcal</span></div></div>
+          </div>
+          <div class="rest-block"><strong>昼が軽くなる日のコツ：</strong>朝食をしっかり食べ、昼は軽めでもOK。早めの帰宅で夜は普通に食べられる。夜ご飯後に筋トレを入れるのがベスト。</div>
+          <div class="ex-block">
+            <div class="ex-title">帰宅後ワークアウト · 20分</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 5回×3</span>
+              <span class="ex-item new">ダンベルカール 12回×3</span>
+              <span class="ex-item">スクワット 20回×3</span>
+              <span class="ex-item">プランク 40秒×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(10)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="11">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">ウォーキング</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ゆで卵2個 + ヨーグルト</strong><span class="kcal">約240kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食 or 作り置き：丼ものはご飯半分</strong><span class="kcal">約600kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き：鶏むね + ブロッコリー + スープ</strong><span class="kcal">約360kcal</span></div></div>
+          </div>
+          <div class="rest-block">歩数目標 8,500歩。</div>
+          <button class="cal-add-btn" onclick="addToCalendar(11)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="12">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">外出予定 · 自由日</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">外出予定日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>軽め <b>昼</b>外食 <b>午後</b>間食 <b>夜</b>軽め</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>鶏むね + ヨーグルト</strong><span class="kcal">約240kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>自由（自由日）</strong><br>ゆっくり食べることだけ意識する<span class="kcal">〜700kcal</span></div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ or チーズ</strong><span class="kcal">約120kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>夜：軽め。お酒はハイボール・焼酎</strong><span class="kcal">約400kcal</span></div></div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(12)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="13">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">週末筋トレ</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">食事</div><div class="mc">自由。夜は炭水化物を少し減らす。</div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">WEEKEND WORKOUT · 35分</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 6回×4</span>
+              <span class="ex-item new">ダンベルデッドリフト 12回×3（5kg×2）</span>
+              <span class="ex-item new">ダンベルランジ 10回×3（5kg×2）</span>
+              <span class="ex-item new">ダンベルサイドレイズ 15回×3（5kg）</span>
+              <span class="ex-item">プランク 50秒×3</span>
+              <span class="ex-item">バーピー 8回×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(13)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="14">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">振り返り + 翌週仕込み</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">計測</div><div class="mc"><strong>体重を計測（朝）</strong><br>数字より「筋トレ週2回できたか」を優先して確認</div></div>
+            <div class="meal-row"><div class="ml">仕込み</div><div class="mc"><strong>翌週分を作り置き</strong><br>鶏むね塩茹で・ゆで卵・ブロッコリー・スープ</div></div>
+          </div>
+          <div class="rest-block">運動なし。体重は週1回・朝起きてすぐ計測。数字に一喜一憂しない。</div>
+          <button class="cal-add-btn" onclick="addToCalendar(14)">カレンダーに追加</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="tips-label">WEEK 2 のアップグレード</div>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-t">食べる順番を固定</div><div class="tip-d">野菜・汁物→タンパク質→炭水化物。血糖値スパイクを防ぐ。</div></div>
+      <div class="tip-card"><div class="tip-t">昼が軽い日の対策</div><div class="tip-d">昼が軽い分、朝をしっかり食べる。早めの帰宅で夜は普通に食べてOK。帰宅後に筋トレ。</div></div>
+      <div class="tip-card"><div class="tip-t">ダンベルで背中を鍛える</div><div class="tip-d">ベントオーバーロウで背中を刺激。懸垂と組み合わせると上半身の引き締めが加速。</div></div>
+      <div class="tip-card"><div class="tip-t">夜のルール</div><div class="tip-d">外出日の夜は炭水化物なし。作り置きがあれば迷わず食べられる。</div></div>
+    </div>
+  </div>
+
+  <!-- ===== W3 ===== -->
+  <div class="panel" id="p3" data-panel="3">
+    <div class="week-header">
+      <div><div class="wh-label">WEEK 3 · <span id="whRange3">--/--〜--/--</span></div><div class="wh-title">負荷を上げる</div><div class="wh-theme">変化を感じ始める週</div></div>
+      <div class="wh-tag">強化フェーズ</div>
+    </div>
+    <div class="prep-box">
+      <div class="prep-box-title">WEEKLY PREP — 継続 + 少し変化</div>
+      <div class="prep-cols">
+        <div>
+          <div class="prep-col-title">追加食材</div>
+          <div class="prep-item">鮭の切り身 or 缶詰（タンパク質増量）</div>
+          <div class="prep-item">大豆水煮パック（手軽なタンパク質）</div>
+          <div class="prep-item">アボカド（良質な脂質）</div>
+          <div class="prep-item">プロテインドリンク（トレ後用）</div>
+        </div>
+        <div>
+          <div class="prep-col-title">作り置き（継続）</div>
+          <div class="prep-item">鶏むね塩茹で（変わらず）</div>
+          <div class="prep-item">ゆで卵×6</div>
+          <div class="prep-item">鮭の塩焼き × 3切れ（冷蔵3日）</div>
+          <div class="prep-item">ブロッコリー + 野菜の蒸し物</div>
+        </div>
+      </div>
+    </div>
+    <div class="day-grid">
+
+      <div class="day-card" data-day="15">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">筋トレ強化版</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ゆで卵2個 + ヨーグルト</strong><span class="kcal">約240kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食：定食系（野菜から食べる）</strong><span class="kcal">約600kcal</span></div></div>
+            <div class="meal-row"><div class="ml">トレ後</div><div class="mc"><strong>30分以内にタンパク質：</strong>プロテインドリンク or サラダチキンバー</div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>鮭 + ブロッコリー + 味噌汁</strong><span class="kcal">約420kcal</span></div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">WEEK 3 WORKOUT · 35分（懸垂重視）</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 6回×5</span>
+              <span class="ex-item new">ダンベルベントオーバーロウ 15回×3</span>
+              <span class="ex-item new">ダンベルデッドリフト 12回×4</span>
+              <span class="ex-item">腕立て（ワイド）12回×3</span>
+              <span class="ex-item">プランク 60秒×3</span>
+              <span class="ex-item">バーピー 8回×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(15)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="16">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">外出予定</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">外出予定日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>軽め <b>昼</b>外食 <b>午後</b>間食 <b>夜</b>軽め</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ゆで卵2個 + ヨーグルト + バナナ</strong><span class="kcal">約310kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>外食：野菜→タンパク質→炭水化物の順</strong><span class="kcal">約600kcal</span></div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ + サラダチキンバー</strong><span class="kcal">約200kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>作り置き鮭 or 鶏むね + 野菜 + スープ</strong><br>炭水化物なし<span class="kcal">約400kcal</span></div></div>
+          </div>
+          <div class="rest-block">通勤の往復を早歩きで。目標9,000歩。</div>
+          <button class="cal-add-btn" onclick="addToCalendar(16)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="17">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">早めの帰宅予定 · 昼が軽い日</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">昼が軽くなる日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>しっかり <b>昼</b>軽め <b>午後</b>間食 <b>夜</b>普通＋筋トレ</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>しっかり食べる：鶏むね + ゆで卵 + ヨーグルト</strong><span class="kcal">約380kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>軽め：おにぎり1個 + サラダチキンバー</strong><span class="kcal">約280kcal</span></div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ + チーズ</strong><span class="kcal">約150kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>早めの夜：作り置き + ご飯少量でOK</strong><span class="kcal">約480kcal</span></div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">帰宅後ワークアウト · 25分</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 6回×4</span>
+              <span class="ex-item new">ダンベルスクワット 15回×3</span>
+              <span class="ex-item new">ダンベルカール 15回×3</span>
+              <span class="ex-item">プランク 60秒×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(17)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="18">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">有酸素ウォーキング</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ゆで卵2個 + ヨーグルト</strong><span class="kcal">約240kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc">外食 or 作り置き。定食系・丼はご飯半分<span class="kcal">約580kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>鮭 or 鶏むね + 野菜 + スープ</strong>（炭水化物控えめ）<span class="kcal">約400kcal</span></div></div>
+          </div>
+          <div class="rest-block">30分ウォーキング（早歩き）。朝でも夜でも可。目標9,000歩。</div>
+          <button class="cal-add-btn" onclick="addToCalendar(18)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="19">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">外出予定 · 自由日</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">外出予定日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>軽め <b>昼</b>外食 <b>午後</b>間食 <b>夜</b>軽め</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc"><strong>ゆで卵2個 + ヨーグルト</strong><span class="kcal">約240kcal</span></div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc"><strong>自由（自由日）</strong><span class="kcal">〜700kcal</span></div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc"><strong>午後の間食：ナッツ + チーズ</strong><span class="kcal">約150kcal</span></div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc"><strong>夜：軽め。炭水化物なし</strong><span class="kcal">約380kcal</span></div></div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(19)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="20">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">週末筋トレ</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">食事</div><div class="mc">自由。夜は炭水化物少なめ。</div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">WEEKEND WORKOUT · 40分（フル強化）</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 7回×5</span>
+              <span class="ex-item new">ダンベルデッドリフト 12回×4</span>
+              <span class="ex-item new">ダンベルスクワット 15回×4</span>
+              <span class="ex-item new">ダンベルショルダープレス 12回×3</span>
+              <span class="ex-item">腕立て 15回×4</span>
+              <span class="ex-item">プランク 60秒×4</span>
+              <span class="ex-item">バーピー 10回×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(20)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="21">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span></div><div class="day-meta">計測 + 翌週仕込み</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">計測</div><div class="mc"><strong>体重・ウエスト計測（朝）</strong><br>3週間続いたら自分を褒める。</div></div>
+            <div class="meal-row"><div class="ml">仕込み</div><div class="mc"><strong>翌週分を作り置き</strong><br>鶏むね・鮭・ゆで卵・ブロッコリー・スープ</div></div>
+          </div>
+          <div class="rest-block">体重より先にウエストが変わる。3週間続いたら習慣化の臨界点を超えた証拠。</div>
+          <button class="cal-add-btn" onclick="addToCalendar(21)">カレンダーに追加</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="tips-label">WEEK 3 のチェックポイント</div>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-t">懸垂の回数を増やす</div><div class="tip-d">週を追うごとに1回ずつ増やす。背中・二頭が目に見えて変わってくる。</div></div>
+      <div class="tip-card"><div class="tip-t">夜の炭水化物を減らす</div><div class="tip-d">外出日（夜）と通常日の夜はご飯なし。おかず+タンパク質で十分。</div></div>
+      <div class="tip-card"><div class="tip-t">ウエストを計測</div><div class="tip-d">体重より先にウエストが変わる。週1回、朝に計測する。</div></div>
+      <div class="tip-card"><div class="tip-t">トレ後30分ルール</div><div class="tip-d">運動後30分以内にタンパク質。プロテインドリンクが一番手軽。</div></div>
+    </div>
+  </div>
+
+  <!-- ===== W4 ===== -->
+  <div class="panel" id="p4" data-panel="4">
+    <div class="week-header">
+      <div><div class="wh-label">WEEK 4 · <span id="whRange4">--/--〜--/--</span></div><div class="wh-title">習慣の定着</div><div class="wh-theme">2ヶ月目への土台を作る週</div></div>
+      <div class="wh-tag">定着フェーズ</div>
+    </div>
+    <div class="prep-box">
+      <div class="prep-box-title">FINAL WEEK PREP — 仕上げの週</div>
+      <div class="prep-cols">
+        <div>
+          <div class="prep-col-title">食材（Week3と同様＋α）</div>
+          <div class="prep-item">鶏むね + 鮭（継続）</div>
+          <div class="prep-item">卵10個（ゆで卵ストック）</div>
+          <div class="prep-item">大豆パック × 3（簡単タンパク質）</div>
+          <div class="prep-item">プロテインドリンク（トレ後用）</div>
+        </div>
+        <div>
+          <div class="prep-col-title">習慣チェック</div>
+          <div class="prep-item">朝起きてすぐ体重計に乗る</div>
+          <div class="prep-item">外出日の間食が自動化されている</div>
+          <div class="prep-item">夜の炭水化物なしが当たり前になっている</div>
+          <div class="prep-item">週2回の筋トレが生活リズムに入っている</div>
+        </div>
+      </div>
+    </div>
+    <div class="day-grid">
+
+      <div class="day-card span-full" data-day="22">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name">Week 4 運動ルーティン（DAY 22〜28）</div><div class="day-meta">週2回筋トレ + ウォーク週2〜3回</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">週2回</div><div class="mc"><strong>筋トレ（Week3メニューを継続・慣れたら回数増）</strong></div></div>
+            <div class="meal-row"><div class="ml">週2〜3回</div><div class="mc"><strong>30分ウォーキング or 通勤の往復で早歩き</strong></div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">WEEK 4 CORE WORKOUT · 40分</div>
+            <div class="ex-list">
+              <span class="ex-item new">懸垂 8回×5</span>
+              <span class="ex-item new">ダンベルデッドリフト 15回×4</span>
+              <span class="ex-item new">ダンベルスクワット 20回×4</span>
+              <span class="ex-item new">ダンベルショルダープレス 15回×3</span>
+              <span class="ex-item new">ダンベルカール 15回×3</span>
+              <span class="ex-item">腕立て 15回×4</span>
+              <span class="ex-item">プランク 60秒×4</span>
+              <span class="ex-item">バーピー 10回×3</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(22)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="23">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span><span class="office-tag">外出日</span></div><div class="day-meta">外出予定 · 習慣の自動化を確認</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="office-banner">
+            <div class="office-banner-title">外出予定日 — 参考の時間帯</div>
+            <div class="office-sched"><b>朝</b>軽め <b>昼</b>外食 <b>午後</b>間食（自動化） <b>夜</b>炭水化物なし</div>
+          </div>
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">朝食</div><div class="mc">タンパク質 + 水1杯が<strong>自動化</strong>されている状態へ</div></div>
+            <div class="meal-row"><div class="ml">昼食</div><div class="mc">外食でも「何を選ぶか」の<strong>判断基準</strong>が身についている</div></div>
+            <div class="meal-row"><div class="ml">間食</div><div class="mc">外出日の午後の間食が<strong>当たり前</strong>になっている</div></div>
+            <div class="meal-row"><div class="ml">夕食</div><div class="mc">夜の<strong>炭水化物なし・軽め</strong>が自然にできるようになっている</div></div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(23)">カレンダーに追加</button>
+        </div>
+      </div>
+
+      <div class="day-card" data-day="28">
+        <button class="day-toggle" onclick="td(this)">
+          <div class="day-pip"></div>
+          <div class="day-info"><div class="day-name"><span class="dn-date"></span>ゴール</div><div class="day-meta">1ヶ月の振り返り + 月末計測</div></div>
+          <div class="day-arr">›</div>
+        </button>
+        <div class="day-body">
+          <div class="meal-section">
+            <div class="meal-row"><div class="ml">体重</div><div class="mc">朝起きてすぐ計測。開始日との差を確認。</div></div>
+            <div class="meal-row"><div class="ml">ウエスト</div><div class="mc">おへそ周りを計測。<strong>-2〜3cmが1ヶ月の目安。</strong></div></div>
+            <div class="meal-row"><div class="ml">振り返り</div><div class="mc"><strong>「できたこと」を数える。</strong>できなかったことは来月のテーマにする。</div></div>
+          </div>
+          <div class="ex-block">
+            <div class="ex-title">1ヶ月達成チェック</div>
+            <div class="ex-list">
+              <span class="ex-item">懸垂回数が増えた</span>
+              <span class="ex-item">作り置き習慣</span>
+              <span class="ex-item">外出日の間食ルール</span>
+              <span class="ex-item">夜の炭水化物カット</span>
+              <span class="ex-item">筋トレ週2回</span>
+              <span class="ex-item">体重・ウエスト計測</span>
+            </div>
+          </div>
+          <button class="cal-add-btn" onclick="addToCalendar(28)">カレンダーに追加</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="tips-label">来月のプレビュー</div>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-t">懸垂に加重する</div><div class="tip-d">懸垂に慣れたら体にダンベルを挟んで加重。一気に負荷が上がる。</div></div>
+      <div class="tip-card"><div class="tip-t">食事の精度UP</div><div class="tip-d">タンパク質を体重×1.5g/日を目標に。作り置き食材で自然に達成できる。</div></div>
+      <div class="tip-card"><div class="tip-t">有酸素を強化</div><div class="tip-d">週2回30分のジョギング追加。懸垂+有酸素で体脂肪燃焼が加速。</div></div>
+      <div class="tip-card"><div class="tip-t">目標を再設定</div><div class="tip-d">1ヶ月の結果をもとに2ヶ月目の具体的な数値目標を立て直す。</div></div>
+    </div>
+  </div>
+
+  <!-- ===== RECORD ===== -->
+  <div class="panel" id="panel-record" data-panel="r">
+    <div class="record-header">
+      <div class="record-title">記録</div>
+      <div class="record-sub">毎日の食事・運動・体重をここで記録する</div>
+    </div>
+
+    <!-- 体重・ウエスト -->
+    <div class="body-section">
+      <div class="body-section-title">体重・ウエスト <span>BODY LOG</span></div>
+      <div class="body-form">
+        <div class="body-input-wrap">
+          <div class="body-input-label">DATE</div>
+          <input type="date" class="body-input" id="bodyDate">
+        </div>
+        <div class="body-input-wrap">
+          <div class="body-input-label">体重 (kg)</div>
+          <input type="number" inputmode="decimal" step="0.1" class="body-input" id="bodyWeight" placeholder="例 68.5">
+        </div>
+        <div class="body-input-wrap">
+          <div class="body-input-label">ウエスト (cm)</div>
+          <input type="number" inputmode="decimal" step="0.1" class="body-input" id="bodyWaist" placeholder="例 82.0">
+        </div>
+        <button class="body-save-btn" onclick="saveBody()">保存</button>
+      </div>
+      <svg class="body-chart" id="bodyChart" viewBox="0 0 600 160" preserveAspectRatio="none"></svg>
+      <div class="body-legend">
+        <span><span class="body-legend-dot" style="background:var(--accent-dark)"></span>体重</span>
+        <span><span class="body-legend-dot" style="background:var(--w2)"></span>ウエスト</span>
+      </div>
+    </div>
+
+    <div class="record-day-select" id="daySelectRow"></div>
+    <div class="record-form">
+      <div class="record-form-title">今日の記録 <span id="recordDateLabel"></span></div>
+      <div class="meal-input-group">
+        <div class="meal-input-label">朝食</div>
+        <textarea class="meal-input" id="in-morning" rows="2" placeholder="例：鶏むね（作り置き）+ ヨーグルト"></textarea>
+      </div>
+      <div class="meal-input-group">
+        <div class="meal-input-label">昼食</div>
+        <textarea class="meal-input" id="in-lunch" rows="2" placeholder="例：外食 定食（ご飯半分）/ 外出日：野菜から食べた"></textarea>
+      </div>
+      <div class="meal-input-group">
+        <div class="meal-input-label">夕食</div>
+        <textarea class="meal-input" id="in-dinner" rows="2" placeholder="例：作り置き鶏むね + ブロッコリー + スープ"></textarea>
+      </div>
+      <div class="meal-input-group">
+        <div class="meal-input-label">間食 / 飲酒</div>
+        <textarea class="meal-input" id="in-snack" rows="1" placeholder="例：ナッツ25g 午後 / ハイボール2杯"></textarea>
+      </div>
+      <div class="meal-input-group">
+        <div class="meal-input-label">運動 / 歩数</div>
+        <textarea class="meal-input" id="in-exercise" rows="2" placeholder="例：懸垂6×5 ダンベルデッドリフト12×3 / 9,200歩"></textarea>
+      </div>
+      <div class="meal-input-group">
+        <div class="meal-input-label">メモ・気づき</div>
+        <textarea class="meal-input" id="in-note" rows="2" placeholder="例：夜が遅かったが炭水化物抜けた。懸垂の回数が先週より増えた。"></textarea>
+      </div>
+      <button class="record-save-btn" onclick="saveRecord()">記録を保存</button>
+    </div>
+    <div class="record-log">
+      <div class="record-log-title">SAVED RECORDS</div>
+      <div id="logContainer"></div>
+    </div>
+  </div>
+
+  </div>
+</main>
+</div>
+
+<nav class="bottom-nav">
+  <div class="bnav-inner">
+    <button class="bnav-btn active" data-w="1" onclick="sw(1)"><span>W1</span><small>基盤</small></button>
+    <button class="bnav-btn" data-w="2" onclick="sw(2)"><span>W2</span><small>質UP</small></button>
+    <button class="bnav-btn" data-w="3" onclick="sw(3)"><span>W3</span><small>強化</small></button>
+    <button class="bnav-btn" data-w="4" onclick="sw(4)"><span>W4</span><small>定着</small></button>
+    <button class="bnav-btn" data-w="r" onclick="sw('r')"><span>記録</span><small>LOG</small></button>
+  </div>
+</nav>
+
+<!-- SETTINGS DIALOG -->
+<dialog class="settings-dialog" id="settingsModal">
+  <div class="settings-head">
+    <div class="settings-title">設定 · 開始日</div>
+    <button class="settings-close" onclick="closeSettings()" aria-label="閉じる">×</button>
+  </div>
+  <div class="settings-body">
+    <div class="settings-row">
+      <div class="settings-label">現在の開始日</div>
+      <div class="settings-current" id="settingsCurrent">--/--</div>
+      <div class="settings-label" style="margin-top:12px">開始日を変更</div>
+      <input type="date" class="settings-input" id="settingsStartDate">
+      <div class="settings-actions">
+        <button class="settings-btn-primary" onclick="applyStartDate()">この日付で開始</button>
+        <button class="settings-btn-secondary" onclick="startToday()">今日からスタート</button>
+      </div>
+      <div class="settings-note">開始日を変更しても食事記録・体重記録は日付タグで保持されます。</div>
+    </div>
+    <div class="settings-row">
+      <div class="settings-label">データ管理</div>
+      <div class="settings-actions">
+        <button class="settings-btn-danger" onclick="clearAllData()">全データを削除する</button>
+      </div>
+      <div class="settings-note">食事記録・体重記録・開始日のすべてをこの端末から削除します（このページ専用 / 元に戻せません）。</div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+'use strict';
+
+/* ============================================================
+   fitness-log — 28日プログラム
+   - 開始日: localStorage に保存。未設定なら今日。
+   - 各 .day-card[data-day="N"] を Week 1〜4 (DAY 1〜28) で動的に描画
+   - 食事記録 / 体重記録は日付タグで保持（開始日変更しても残る）
+   ============================================================ */
+
+const K_SETTINGS = 'fl_settings_v1';
+const K_MEAL     = 'fl_meal_log_v1';
+const K_BODY     = 'fl_body_log_v1';
+const K_LEGACY   = 'diet_records_v2';
+const TOTAL_DAYS = 28;
+const WD = ['日','月','火','水','木','金','土'];
+
+/* ---------- utilities ---------- */
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function mmdd(d){return (d.getMonth()+1)+'/'+d.getDate();}
+function parseYmd(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
+function pad(n){return String(n).padStart(2,'0');}
+function todayDate(){const d=new Date();d.setHours(0,0,0,0);return d;}
+
+/* ---------- settings / start date ---------- */
+function loadSettings(){
+  try{return JSON.parse(localStorage.getItem(K_SETTINGS))||{};}catch(e){return {};}
+}
+function saveSettings(s){try{localStorage.setItem(K_SETTINGS,JSON.stringify(s));}catch(e){}}
+function getStartDate(){
+  const s = loadSettings();
+  if(s.startDate){return parseYmd(s.startDate);}
+  const t = todayDate();
+  saveSettings({...s, startDate: ymd(t)});
+  return t;
+}
+function setStartDate(d){
+  const s = loadSettings();
+  s.startDate = ymd(d);
+  saveSettings(s);
+}
+
+/* ---------- day <-> date mapping ---------- */
+function dayToDate(n){
+  const start = getStartDate();
+  const d = new Date(start);
+  d.setDate(d.getDate() + (n-1));
+  return d;
+}
+function dateToDay(date){
+  const start = getStartDate();
+  const diff = Math.floor((date - start) / 86400000);
+  return diff + 1;
+}
+function dayToWeek(n){return Math.ceil(n / 7);}
+
+/* ---------- meal / body storage ---------- */
+function loadMeal(){try{return JSON.parse(localStorage.getItem(K_MEAL))||{};}catch(e){return {};}}
+function saveMealAll(r){try{localStorage.setItem(K_MEAL,JSON.stringify(r));}catch(e){}}
+function loadBody(){try{return JSON.parse(localStorage.getItem(K_BODY))||{};}catch(e){return {};}}
+function saveBodyAll(r){try{localStorage.setItem(K_BODY,JSON.stringify(r));}catch(e){}}
+
+/* Migrate legacy diet_records_v2 → fl_meal_log_v1 (one-time) */
+function migrateLegacy(){
+  try{
+    const legacy = localStorage.getItem(K_LEGACY);
+    const cur = localStorage.getItem(K_MEAL);
+    if(legacy && !cur){
+      localStorage.setItem(K_MEAL, legacy);
+    }
+  }catch(e){}
+}
+
+/* ---------- UI: panel switching ---------- */
+function sw(n){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.snav-btn,.mtab,.bnav-btn').forEach(b=>b.classList.remove('active'));
+  const pid = n==='r' ? 'panel-record' : 'p'+n;
+  const panel = document.getElementById(pid);
+  if(panel) panel.classList.add('active');
+  document.querySelectorAll('[data-w="'+n+'"]').forEach(b=>b.classList.add('active'));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n==='r'){renderLog();renderBodyChart();}
+}
+function td(btn){btn.closest('.day-card').classList.toggle('open');}
+
+/* ---------- toast ---------- */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+/* ---------- render dates everywhere ---------- */
+function renderDates(){
+  const start = getStartDate();
+  const end = dayToDate(TOTAL_DAYS);
+
+  // Sidebar logo / plan range
+  const planRange = document.getElementById('planRange');
+  if(planRange) planRange.textContent = mmdd(start)+' → '+mmdd(end);
+
+  // Week ranges (sidebar nav + week header label)
+  for(let w=1; w<=4; w++){
+    const s = dayToDate((w-1)*7 + 1);
+    const e = dayToDate(w*7);
+    const navEl = document.getElementById('wRange'+w);
+    if(navEl) navEl.textContent = mmdd(s)+' 〜 '+mmdd(e);
+    const whEl = document.getElementById('whRange'+w);
+    if(whEl) whEl.textContent = mmdd(s)+'〜'+mmdd(e);
+  }
+
+  // Each day-card: fill .dn-date span with "M/D（曜）"
+  document.querySelectorAll('.day-card[data-day]').forEach(card=>{
+    const dayN = parseInt(card.dataset.day, 10);
+    const d = dayToDate(dayN);
+    const dn = card.querySelector('.dn-date');
+    if(dn){
+      dn.textContent = 'DAY '+dayN+' · '+mmdd(d)+'（'+WD[d.getDay()]+'）';
+    }
+  });
+}
+
+/* ---------- progress / day indicator / streak ---------- */
+function todayDayNum(){
+  const t = todayDate();
+  const n = dateToDay(t);
+  if(n < 1) return 0;       // before start
+  if(n > TOTAL_DAYS) return TOTAL_DAYS;
+  return n;
+}
+function updateProgress(){
+  const n = todayDayNum();
+  const pct = Math.max(0, Math.min(100, n / TOTAL_DAYS * 100));
+  const fill = document.getElementById('progressFill');
+  const ptxt = document.getElementById('progressText');
+  if(fill) fill.style.width = pct + '%';
+  if(ptxt) ptxt.textContent = n + ' / ' + TOTAL_DAYS;
+  const md = document.getElementById('mobDay');
+  if(md) md.textContent = 'DAY '+n+' / '+TOTAL_DAYS;
+  const sd = document.getElementById('statDay');
+  if(sd) sd.textContent = String(n);
+  const today = todayDate();
+  const pcLabel = document.getElementById('pc-today-label');
+  if(pcLabel){
+    if(n >= 1 && n <= TOTAL_DAYS) pcLabel.textContent = 'DAY '+n+' / '+TOTAL_DAYS;
+    else if(n < 1) pcLabel.textContent = '開始前';
+    else pcLabel.textContent = 'プログラム終了';
+  }
+  const pcDate = document.getElementById('pc-today-date');
+  if(pcDate) pcDate.textContent = mmdd(today);
+  const mobLabel = document.getElementById('mob-today-label');
+  if(mobLabel) mobLabel.textContent = mmdd(today);
+}
+function calcStreak(){
+  const meals = loadMeal();
+  let streak = 0;
+  const d = todayDate();
+  for(let i=0; i<400; i++){
+    const k = ymd(d);
+    const r = meals[k];
+    const hasAny = r && (r.morning || r.lunch || r.dinner || r.snack || r.exercise || r.note);
+    if(!hasAny) break;
+    streak++;
+    d.setDate(d.getDate() - 1);
+  }
+  return streak;
+}
+function updateStreak(){
+  const el = document.getElementById('streakStat');
+  if(el) el.textContent = String(calcStreak());
+}
+
+/* ---------- TODAY navigation ---------- */
+function goToday(){
+  const today = todayDate();
+  const n = dateToDay(today);
+  let week;
+  if(n >= 1 && n <= TOTAL_DAYS){
+    week = dayToWeek(n);
+  } else {
+    week = n < 1 ? 1 : 4;
+  }
+  sw(week);
+  setTimeout(()=>{
+    let card = document.querySelector('#p'+week+' .day-card[data-day="'+n+'"]');
+    if(!card) card = document.querySelector('#p'+week+' .day-card');
+    if(!card) return;
+    document.querySelectorAll('.day-card.today-highlight').forEach(c=>{
+      c.classList.remove('today-highlight','open');
+      c.querySelectorAll('.today-pill').forEach(p=>p.remove());
+    });
+    card.classList.add('open','today-highlight');
+    const nm = card.querySelector('.day-name');
+    if(nm && !nm.querySelector('.today-pill')){
+      const p = document.createElement('span');
+      p.className = 'today-pill';
+      p.textContent = '今日';
+      nm.appendChild(p);
+    }
+    setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'start'}), 120);
+    toast(mmdd(today)+' の予定を表示');
+  }, 220);
+}
+
+/* ---------- DAY_PLAN (day number → calendar entry) ---------- */
+const DAY_PLAN = {
+  1:{title:'準備日',desc:'作り置きをする。鶏むね塩茹で・ゆで卵・きのこスープを仕込む。運動:懸垂3x3 ダンベルカール10x3 プランク30秒x3 スクワット15x3'},
+  2:{title:'外出日',desc:'朝:鶏むね+ヨーグルト 昼:外食(野菜から) 午後:ナッツ間食 夜:作り置き鶏むね+野菜 炭水化物なし'},
+  3:{title:'ウォーキング',desc:'朝:ヨーグルト+バナナ 昼:外食or作り置き 夜:鶏むね+おひたし+味噌汁 / 歩数8000歩目標'},
+  4:{title:'筋トレ',desc:'朝:サラダチキンバー+ヨーグルト 昼:外食or作り置き 夜:鶏むね+スープ+おにぎり / 運動:懸垂4x3 ダンベルベントオーバーロウ12x3 ダンベルショルダープレス10x3 腕立て10x3 プランク40秒x3'},
+  5:{title:'外出日（自由）',desc:'朝:鶏むね+ヨーグルト 昼:外食自由 午後:間食 夜:軽め・お酒はハイボール'},
+  6:{title:'週末筋トレ',desc:'朝:ゆで卵+ヨーグルト 昼:自由 夜:鶏むね+味噌汁+野菜 / 運動:懸垂5x4 ダンベルRDL12x3 ダンベルスクワット15x3 ダンベルカール12x3 プランク45秒x3 腹筋20x3'},
+  7:{title:'休息+翌週仕込み',desc:'食事:自由。翌週分の作り置き仕込み。鶏むね・ゆで卵・きのこスープ・野菜。'},
+  8:{title:'筋トレ(負荷UP)',desc:'朝:ゆで卵+ヨーグルト 昼:外食(野菜から) 夜:鶏むね+ブロッコリー+スープ / 運動:懸垂5x4 ダンベルロウ12x3 ショルダープレス12x3 腕立て15x3 プランク45秒x3 腹筋25x3'},
+  9:{title:'外出日',desc:'朝:ゆで卵+サラダチキンバー 昼:外食(野菜→タンパク→炭水) 午後:ナッツ 夜:作り置き 炭水化物なし'},
+  10:{title:'昼が軽い日',desc:'朝:しっかり 鶏むね+ゆで卵+ヨーグルト 昼:軽め おにぎり+サラダチキンバー 午後:間食 夜:作り置き+ご飯少量 / 帰宅後運動:懸垂5x3 ダンベルカール12x3 スクワット20x3 プランク40秒x3'},
+  11:{title:'ウォーキング',desc:'朝:ゆで卵+ヨーグルト 昼:外食or作り置き 夜:鶏むね+ブロッコリー+スープ / 歩数8500歩目標'},
+  12:{title:'外出日（自由）',desc:'朝:鶏むね+ヨーグルト 昼:外食自由(ゆっくり食べる) 午後:間食 夜:軽め・お酒はハイボール'},
+  13:{title:'週末筋トレ',desc:'食事:自由(夜は炭水化物少なめ) / 運動:懸垂6x4 ダンベルデッドリフト12x3 ダンベルランジ10x3 サイドレイズ15x3 プランク50秒x3 バーピー8x3'},
+  14:{title:'振り返り+仕込み',desc:'体重計測(朝)。翌週作り置き:鶏むね・ゆで卵・ブロッコリー・スープ。運動なし。'},
+  15:{title:'筋トレ強化',desc:'朝:ゆで卵+ヨーグルト 昼:外食定食 トレ後30分:タンパク質 夜:鮭+ブロッコリー+味噌汁 / 運動:懸垂6x5 ダンベルロウ15x3 ダンベルデッドリフト12x4 腕立て(ワイド)12x3 プランク60秒x3 バーピー8x3'},
+  16:{title:'外出日',desc:'朝:ゆで卵+ヨーグルト+バナナ 昼:外食(野菜→タンパク→炭水) 午後:ナッツ+サラダチキンバー 夜:作り置き 炭水化物なし / 通勤の往復で早歩き 目標9000歩'},
+  17:{title:'昼が軽い日',desc:'朝:しっかり鶏むね+ゆで卵+ヨーグルト 昼:軽め おにぎり+チキンバー 午後:ナッツ+チーズ 夜:作り置き+ご飯少量 / 帰宅後運動:懸垂6x4 ダンベルスクワット15x3 ダンベルカール15x3 プランク60秒x3'},
+  18:{title:'有酸素ウォーキング',desc:'朝:ゆで卵+ヨーグルト 昼:外食(定食系) 夜:鮭 or 鶏むね+野菜+スープ 炭水化物控えめ / 30分ウォーキング(早歩き) 目標9000歩'},
+  19:{title:'外出日（自由）',desc:'朝:ゆで卵+ヨーグルト 昼:外食自由 午後:ナッツ+チーズ 夜:軽め 炭水化物なし'},
+  20:{title:'週末筋トレ強化',desc:'食事:自由(夜は炭水化物少なめ) / 運動:懸垂7x5 ダンベルデッドリフト12x4 ダンベルスクワット15x4 ショルダープレス12x3 腕立て15x4 プランク60秒x4 バーピー10x3'},
+  21:{title:'計測+仕込み',desc:'体重・ウエスト計測(朝)。翌週作り置き:鶏むね・鮭・ゆで卵・ブロッコリー・スープ。3週間継続おめでとう。'},
+  22:{title:'Week4筋トレ',desc:'運動:懸垂8x5 ダンベルデッドリフト15x4 ダンベルスクワット20x4 ショルダープレス15x3 ダンベルカール15x3 腕立て15x4 プランク60秒x4 バーピー10x3'},
+  23:{title:'外出日(Week4)',desc:'外出日の習慣が自動化されているか確認。間食・夜の炭水化物なし・朝タンパク質。'},
+  28:{title:'ゴール 月末計測',desc:'体重・ウエスト計測(朝起きてすぐ)。1ヶ月の振り返り。できたことを数える。2ヶ月目の目標設定。お疲れさまでした。'},
+};
+
+function addToCalendar(dayN){
+  const plan = DAY_PLAN[dayN] || {title:'DAY '+dayN, desc:'fitness-log DAY '+dayN};
+  const d = dayToDate(dayN);
+  const dateStr = ymd(d);
+  const title = 'fitness-log: '+plan.title;
+  const desc = plan.desc.split(String.fromCharCode(10)).join(String.fromCharCode(92)+'n');
+  const dt = dateStr.split('-').join('');
+  const now = new Date();
+  const stamp = now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate())+'T'+pad(now.getUTCHours())+pad(now.getUTCMinutes())+pad(now.getUTCSeconds())+'Z';
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//fitness-log//JP','CALSCALE:GREGORIAN','METHOD:PUBLISH',
+    'BEGIN:VEVENT','UID:fl-'+dt+'-'+dayN+'@fitness-log','DTSTAMP:'+stamp,
+    'DTSTART;VALUE=DATE:'+dt,'DTEND;VALUE=DATE:'+dt,
+    'SUMMARY:'+title,'DESCRIPTION:'+desc,
+    'END:VEVENT','END:VCALENDAR'
+  ].join(String.fromCharCode(13, 10));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], {type:'text/calendar;charset=utf-8'}));
+  a.download = 'fitness-log-day'+dayN+'-'+dateStr+'.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  toast('カレンダーファイルを保存しました');
+}
+
+/* ---------- meal record ---------- */
+let curDate = '';
+function buildDaySelector(){
+  const row = document.getElementById('daySelectRow');
+  if(!row) return;
+  row.innerHTML = '';
+  for(let i=1; i<=TOTAL_DAYS; i++){
+    const d = dayToDate(i);
+    const btn = document.createElement('button');
+    btn.className = 'rday-btn';
+    btn.dataset.date = ymd(d);
+    btn.textContent = mmdd(d);
+    btn.onclick = ()=>selectDay(ymd(d));
+    row.appendChild(btn);
+  }
+  const today = todayDate(), k = ymd(today);
+  const s = dayToDate(1), e = dayToDate(TOTAL_DAYS);
+  selectDay((today >= s && today <= e) ? k : ymd(s));
+}
+function selectDay(ds){
+  curDate = ds;
+  document.querySelectorAll('.rday-btn').forEach(b=>b.classList.toggle('active', b.dataset.date === ds));
+  const d = parseYmd(ds);
+  document.getElementById('recordDateLabel').textContent = mmdd(d);
+  const r = loadMeal()[ds] || {};
+  document.getElementById('in-morning').value  = r.morning  || '';
+  document.getElementById('in-lunch').value    = r.lunch    || '';
+  document.getElementById('in-dinner').value   = r.dinner   || '';
+  document.getElementById('in-snack').value    = r.snack    || '';
+  document.getElementById('in-exercise').value = r.exercise || '';
+  document.getElementById('in-note').value     = r.note     || '';
+  renderLog();
+}
+function saveRecord(){
+  if(!curDate) return;
+  const rec = loadMeal();
+  rec[curDate] = {
+    morning:  document.getElementById('in-morning').value.trim(),
+    lunch:    document.getElementById('in-lunch').value.trim(),
+    dinner:   document.getElementById('in-dinner').value.trim(),
+    snack:    document.getElementById('in-snack').value.trim(),
+    exercise: document.getElementById('in-exercise').value.trim(),
+    note:     document.getElementById('in-note').value.trim(),
+  };
+  saveMealAll(rec); toast('記録を保存しました'); renderLog(); updateStreak();
+}
+function deleteRecord(ds){
+  const rec = loadMeal(); delete rec[ds]; saveMealAll(rec);
+  if(curDate === ds){
+    ['in-morning','in-lunch','in-dinner','in-snack','in-exercise','in-note'].forEach(id=>document.getElementById(id).value='');
+  }
+  renderLog(); updateStreak(); toast('削除しました');
+}
+function renderLog(){
+  const c = document.getElementById('logContainer'); if(!c) return;
+  const rec = loadMeal();
+  const keys = Object.keys(rec).sort().reverse();
+  if(!keys.length){ c.innerHTML = '<div class="log-empty">まだ記録がありません</div>'; return; }
+  c.innerHTML = '';
+  keys.forEach(k=>{
+    const r = rec[k];
+    const hasAny = r.morning || r.lunch || r.dinner || r.snack || r.exercise || r.note;
+    if(!hasAny) return;
+    const d = parseYmd(k); const dw = WD[d.getDay()];
+    const lines = [];
+    if(r.morning)  lines.push('<b>朝</b> '+r.morning);
+    if(r.lunch)    lines.push('<b>昼</b> '+r.lunch);
+    if(r.dinner)   lines.push('<b>夜</b> '+r.dinner);
+    if(r.snack)    lines.push('<b>間食</b> '+r.snack);
+    if(r.exercise) lines.push('<b>運動</b> '+r.exercise);
+    const el = document.createElement('div'); el.className = 'log-entry';
+    el.innerHTML = '<div class="log-entry-date"><span>'+mmdd(d)+'（'+dw+'）</span><button class="log-del" onclick="deleteRecord(\''+k+'\')">削除</button></div><div class="log-meal">'+lines.join('<br>')+'</div>'+(r.note ? '<div class="log-note">'+r.note+'</div>' : '');
+    c.appendChild(el);
+  });
+}
+
+/* ---------- body (weight / waist) record ---------- */
+function saveBody(){
+  const ds = document.getElementById('bodyDate').value;
+  const w = parseFloat(document.getElementById('bodyWeight').value);
+  const ws = parseFloat(document.getElementById('bodyWaist').value);
+  if(!ds){ toast('日付を入力してください'); return; }
+  if(isNaN(w) && isNaN(ws)){ toast('体重かウエストを入力してください'); return; }
+  const all = loadBody();
+  const cur = all[ds] || {};
+  if(!isNaN(w))  cur.weight = w;
+  if(!isNaN(ws)) cur.waist  = ws;
+  all[ds] = cur;
+  saveBodyAll(all);
+  toast('体重・ウエストを保存しました');
+  renderBodyChart();
+}
+function renderBodyChart(){
+  const svg = document.getElementById('bodyChart'); if(!svg) return;
+  const data = loadBody();
+  const keys = Object.keys(data).sort();
+  if(!keys.length){
+    svg.innerHTML = '<text x="300" y="80" text-anchor="middle" fill="#888" font-size="13" font-family="Noto Sans JP, sans-serif">体重・ウエストの記録がここに表示されます</text>';
+    return;
+  }
+  const W = 600, H = 160, padL = 36, padR = 12, padT = 14, padB = 22;
+  const xs = keys.map(k=>parseYmd(k).getTime());
+  const xMin = Math.min(...xs), xMax = Math.max(...xs);
+  const xRange = Math.max(1, xMax - xMin);
+  const weights = keys.map(k=>data[k].weight).filter(v=>typeof v==='number');
+  const waists  = keys.map(k=>data[k].waist).filter(v=>typeof v==='number');
+  const allVals = [...weights, ...waists];
+  if(!allVals.length){
+    svg.innerHTML = '<text x="300" y="80" text-anchor="middle" fill="#888" font-size="13">数値の記録がありません</text>';
+    return;
+  }
+  const vMin = Math.min(...allVals), vMax = Math.max(...allVals);
+  const vPad = Math.max(0.5, (vMax - vMin) * 0.15);
+  const yMin = vMin - vPad, yMax = vMax + vPad;
+  const yRange = Math.max(0.1, yMax - yMin);
+  function px(t){return padL + (t - xMin) / xRange * (W - padL - padR);}
+  function py(v){return padT + (1 - (v - yMin) / yRange) * (H - padT - padB);}
+  function pathFor(field, color){
+    const pts = keys.filter(k=>typeof data[k][field]==='number')
+                    .map(k=>[px(parseYmd(k).getTime()), py(data[k][field])]);
+    if(!pts.length) return '';
+    const line = pts.map((p,i)=>(i===0?'M':'L')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+    const dots = pts.map(p=>'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="2.5" fill="'+color+'"/>').join('');
+    return '<path d="'+line+'" fill="none" stroke="'+color+'" stroke-width="1.8"/>'+dots;
+  }
+  // grid: 4 horizontal lines + labels
+  let grid = '';
+  for(let i=0; i<=3; i++){
+    const v = yMin + yRange * (1 - i/3);
+    const y = padT + (i/3) * (H - padT - padB);
+    grid += '<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="#eee" stroke-width="1"/>'
+         + '<text x="4" y="'+(y+4)+'" font-size="9" font-family="DM Mono,monospace" fill="#888">'+v.toFixed(1)+'</text>';
+  }
+  const ACC = getComputedStyle(document.documentElement).getPropertyValue('--accent-dark').trim() || '#6db800';
+  const W2  = getComputedStyle(document.documentElement).getPropertyValue('--w2').trim() || '#0088bb';
+  svg.innerHTML = grid + pathFor('weight', ACC) + pathFor('waist', W2);
+}
+
+/* ---------- settings modal ---------- */
+function openSettings(){
+  const dlg = document.getElementById('settingsModal');
+  const start = getStartDate();
+  document.getElementById('settingsCurrent').textContent = ymd(start)+'（'+mmdd(start)+'）';
+  document.getElementById('settingsStartDate').value = ymd(start);
+  if(typeof dlg.showModal === 'function'){dlg.showModal();}
+  else{dlg.setAttribute('open','');}
+}
+function closeSettings(){
+  const dlg = document.getElementById('settingsModal');
+  if(typeof dlg.close === 'function'){dlg.close();}
+  else{dlg.removeAttribute('open');}
+}
+function applyStartDate(){
+  const v = document.getElementById('settingsStartDate').value;
+  if(!v){toast('日付を選んでください');return;}
+  setStartDate(parseYmd(v));
+  closeSettings();
+  fullRefresh();
+  toast('開始日を更新しました');
+}
+function startToday(){
+  setStartDate(todayDate());
+  closeSettings();
+  fullRefresh();
+  toast('今日を開始日にしました');
+}
+function clearAllData(){
+  if(!confirm('食事記録・体重記録・開始日のすべてをこの端末から削除します。元に戻せません。本当に削除しますか？')) return;
+  try{
+    localStorage.removeItem(K_MEAL);
+    localStorage.removeItem(K_BODY);
+    localStorage.removeItem(K_SETTINGS);
+    localStorage.removeItem(K_LEGACY);
+  }catch(e){}
+  closeSettings();
+  fullRefresh();
+  toast('全データを削除しました');
+}
+
+/* ---------- full refresh ---------- */
+function fullRefresh(){
+  renderDates();
+  updateProgress();
+  updateStreak();
+  buildDaySelector();
+  renderBodyChart();
+}
+
+/* ---------- init ---------- */
+(function init(){
+  migrateLegacy();
+  getStartDate();
+  // default body-date to today
+  const bd = document.getElementById('bodyDate');
+  if(bd) bd.value = ymd(todayDate());
+  fullRefresh();
+  // Auto-jump to today's week on first load
+  const today = todayDate(), n = dateToDay(today);
+  if(n >= 1 && n <= TOTAL_DAYS){
+    const w = dayToWeek(n);
+    if(w !== 1) sw(w);
+  }
+  // Close dialog on backdrop click
+  const dlg = document.getElementById('settingsModal');
+  if(dlg){
+    dlg.addEventListener('click', function(e){
+      if(e.target === dlg) closeSettings();
+    });
+  }
+})();
+</script>
+</body>
+</html>
