@@ -209,6 +209,14 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .ci-done-banner{margin-top:12px;padding:8px 14px;background:rgba(170,255,0,0.16);border:1px solid rgba(170,255,0,0.4);border-radius:10px;font-size:11px;color:var(--accent);text-align:center;font-family:'DM Mono',monospace;letter-spacing:0.06em;font-weight:700;display:none}
 .ci-done-banner.show{display:block;animation:slideIn 0.4s ease}
 
+/* HUB CTA — meal log shortcut */
+.hub-cta{margin-top:12px;display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.15s;-webkit-tap-highlight-color:transparent}
+.hub-cta:hover{background:rgba(255,255,255,0.1)}
+.hub-cta-text{flex:1;text-align:left}
+.hub-cta-meta{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.06em;color:rgba(255,255,255,0.5);padding:3px 8px;border-radius:100px;background:rgba(255,255,255,0.08)}
+.hub-cta-meta.done{color:var(--ink);background:var(--accent)}
+.hub-cta-arrow{font-size:18px;color:rgba(255,255,255,0.5);line-height:1}
+
 /* HEATMAP (28 squares) */
 .heatmap-wrap{margin-bottom:24px}
 .heatmap-title{font-size:10px;font-family:'DM Mono',monospace;letter-spacing:0.12em;color:var(--text3);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
@@ -502,6 +510,11 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         </button>
       </div>
       <div class="ci-done-banner" id="ciDoneBanner">DAY DONE — お疲れさまでした</div>
+      <button class="hub-cta" onclick="sw('r')" aria-label="食事と運動の記録へ">
+        <span class="hub-cta-text">食事・運動を記録する</span>
+        <span class="hub-cta-meta" id="hubCtaMeta">未記録</span>
+        <span class="hub-cta-arrow">›</span>
+      </button>
     </div>
   </div>
 
@@ -1765,6 +1778,14 @@ function renderHub(){
   if(banner) banner.classList.toggle('show', doneCount === 3);
   const streakEl = document.getElementById('hubStreak');
   if(streakEl) streakEl.textContent = String(calcStreak());
+  // meal CTA: indicate whether today has a meal record yet
+  const meal = loadMeal()[ymd(today)] || {};
+  const mealAny = !!(meal.morning || meal.lunch || meal.dinner || meal.snack || meal.exercise || meal.note);
+  const ctaMeta = document.getElementById('hubCtaMeta');
+  if(ctaMeta){
+    ctaMeta.textContent = mealAny ? '記録済み' : '未記録';
+    ctaMeta.classList.toggle('done', mealAny);
+  }
   // hide hub if out of range and no need
   const hub = document.getElementById('todayHub');
   if(hub) hub.style.display = (n < -2 || n > TOTAL_DAYS + 30) ? 'none' : '';
